@@ -1,0 +1,67 @@
+# 数据集 (非常大，不上传)
+*.edf
+*.edf.gz
+*.hypnogram
+*.hypnogram.gz
+*.EDF
+
+# Python缓存
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+.venv/
+
+# IDE和编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# 临时文件和日志
+*.log
+*.tmp
+*.bak
+*.swp
+*.zip
+
+# 大型中间结果文件夹
+experiment_results/
+results_pytorch/
+experiment_results_0511/
+results_pytorch_0511/
+
+# LaTeX临时编译产物
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.synctex(busy)
+*.out
+*.toc
+*.pag
+*.bbl
+*.blg
+*.pdf
+
+# PyTorch模型权重
+*.pth
+*.pt
+*.pkl
+*.h5
+*.hdf5
+
+# Trae IDE特定文件夹
+.deepseek/
+.trae/
+%SystemDrive%/
+
+# 本地环境配置
+*.env
+local_config.py

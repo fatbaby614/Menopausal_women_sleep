@@ -1,0 +1,124 @@
+{
+    "description": "更年期女性受试者信息汇总（用于睡眠分期研究）",
+    "menopause_age_range": [45, 55],
+    "created_date": "2026-04-28",
+    "updated_date": "2026-05-01",
+    "update_note": "添加DREAMS数据集更年期女性受试者",
+    "datasets": {
+        "Sleep-EDF": {
+            "description": "Sleep-EDF Expanded Database",
+            "total_subjects": 106,
+            "total_females": 48,
+            "total_menopausal": 8,
+            "female_subjects": [
+                {"subject_id": "20", "age": 51, "gender": "F", "subset": "SC"},
+                {"subject_id": "21", "age": 51, "gender": "F", "subset": "SC"},
+                {"subject_id": "23", "age": 50, "gender": "F", "subset": "SC"},
+                {"subject_id": "24", "age": 54, "gender": "F", "subset": "SC"},
+                {"subject_id": "26", "age": 51, "gender": "F", "subset": "SC"},
+                {"subject_id": "27", "age": 54, "gender": "F", "subset": "SC"},
+                {"subject_id": "29", "age": 51, "gender": "F", "subset": "SC"},
+                {"subject_id": "80", "age": 54, "gender": "F", "subset": "SC"}
+            ],
+            "menopausal_subjects": [
+                {"subject_id": "20", "age": 51, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "21", "age": 51, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "23", "age": 50, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "24", "age": 54, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "26", "age": 51, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "27", "age": 54, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "29", "age": 51, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "80", "age": 54, "gender": "F", "subset": "SC", "nights": [1, 2]}
+            ]
+        },
+        "ISRUC-Sleep": {
+            "description": "ISRUC-Sleep Database Subgroup-I",
+            "total_subjects": 67,
+            "total_females": 22,
+            "total_menopausal": 5,
+            "female_subjects": [
+                {"subject_id": 5, "age": 58, "gender": "F", "diagnosis": "SAOS", "other_problems": "Insomnia"},
+                {"subject_id": 10, "age": 53, "gender": "F", "diagnosis": "SAOS", "other_problems": "AVC; depression"},
+                {"subject_id": 19, "age": 59, "gender": "F", "diagnosis": "SAOS", "other_problems": ""},
+                {"subject_id": 21, "age": 72, "gender": "F", "diagnosis": "SAOS", "other_problems": ""},
+                {"subject_id": 23, "age": 50, "gender": "F", "diagnosis": "SAOS", "other_problems": ""},
+                {"subject_id": 25, "age": 29, "gender": "F", "diagnosis": "D. Afectiva", "other_problems": ""},
+                {"subject_id": 27, "age": 26, "gender": "F", "diagnosis": "RONCOPATIA", "other_problems": ""},
+                {"subject_id": 28, "age": 62, "gender": "F", "diagnosis": "SAOS", "other_problems": "Renal failure"},
+                {"subject_id": 29, "age": 42, "gender": "F", "diagnosis": "RONCOPATIA", "other_problems": ""},
+                {"subject_id": 33, "age": 32, "gender": "F", "diagnosis": "SAOS", "other_problems": ""},
+                {"subject_id": 34, "age": 43, "gender": "F", "diagnosis": "SAOS", "other_problems": "PLMS"},
+                {"subject_id": 36, "age": 36, "gender": "F", "diagnosis": "D. Afectiva", "other_problems": ""},
+                {"subject_id": 40, "age": 62, "gender": "F", "diagnosis": "D. Afectiva", "other_problems": "Epilepsy"},
+                {"subject_id": 41, "age": 66, "gender": "F", "diagnosis": "SAOS", "other_problems": "AVC"},
+                {"subject_id": 42, "age": 67, "gender": "F", "diagnosis": "SAOS", "other_problems": "Chronic Respiratory Failure"},
+                {"subject_id": 43, "age": 44, "gender": "F", "diagnosis": "SAOS", "other_problems": ""},
+                {"subject_id": 44, "age": 46, "gender": "F", "diagnosis": "D. Afectiva", "other_problems": "Depression; hypophisis adenoma"},
+                {"subject_id": 45, "age": 60, "gender": "F", "diagnosis": "SAOS", "other_problems": ""},
+                {"subject_id": 48, "age": 23, "gender": "F", "diagnosis": "S. PERNAS INQUIETAS", "other_problems": ""},
+                {"subject_id": 51, "age": 61, "gender": "F", "diagnosis": "RONCOPATIA", "other_problems": ""},
+                {"subject_id": 54, "age": 66, "gender": "F", "diagnosis": "D. Afectiva", "other_problems": "Multiple sclerosis"},
+                {"subject_id": 59, "age": 48, "gender": "F", "diagnosis": "SAOS", "other_problems": ""},
+                {"subject_id": 60, "age": 62, "gender": "F", "diagnosis": "SAOS", "other_problems": "Scoliosis; chronic respiratory failure"},
+                {"subject_id": 61, "age": 56, "gender": "F", "diagnosis": "SAOS", "other_problems": ""},
+                {"subject_id": 63, "age": 62, "gender": "F", "diagnosis": "SAOS", "other_problems": "Depression"},
+                {"subject_id": 64, "age": 55, "gender": "F", "diagnosis": "SAOS", "other_problems": "Depression"},
+                {"subject_id": 65, "age": 31, "gender": "F", "diagnosis": "RONCOPATIA", "other_problems": ""},
+                {"subject_id": 67, "age": 33, "gender": "F", "diagnosis": "Parasomnia", "other_problems": "Depression"}
+            ],
+            "menopausal_subjects": [
+                {"subject_id": 10, "age": 53, "gender": "F", "diagnosis": "SAOS", "other_problems": "AVC; depression", "nights": [1, 2]},
+                {"subject_id": 23, "age": 50, "gender": "F", "diagnosis": "SAOS", "other_problems": "", "nights": [1, 2]},
+                {"subject_id": 44, "age": 46, "gender": "F", "diagnosis": "D. Afectiva", "other_problems": "Depression; hypophisis adenoma", "nights": [1, 2]},
+                {"subject_id": 59, "age": 48, "gender": "F", "diagnosis": "SAOS", "other_problems": "", "nights": [1, 2]},
+                {"subject_id": 64, "age": 55, "gender": "F", "diagnosis": "SAOS", "other_problems": "Depression", "nights": [1, 2]}
+            ]
+        },
+        "DREAMS": {
+            "description": "DREAMS Subjects Database - Healthy Subjects",
+            "total_subjects": 20,
+            "total_females": 16,
+            "total_menopausal": 5,
+            "female_subjects": [
+                {"subject_id": "subject1", "age": 23, "gender": "F"},
+                {"subject_id": "subject2", "age": 47, "gender": "F"},
+                {"subject_id": "subject3", "age": 24, "gender": "F"},
+                {"subject_id": "subject4", "age": 48, "gender": "F"},
+                {"subject_id": "subject5", "age": 46, "gender": "F"},
+                {"subject_id": "subject6", "age": 65, "gender": "F"},
+                {"subject_id": "subject7", "age": 45, "gender": "F"},
+                {"subject_id": "subject8", "age": 22, "gender": "F"},
+                {"subject_id": "subject9", "age": 21, "gender": "F"},
+                {"subject_id": "subject10", "age": 20, "gender": "F"},
+                {"subject_id": "subject11", "age": 30, "gender": "F"},
+                {"subject_id": "subject12", "age": 54, "gender": "F"},
+                {"subject_id": "subject13", "age": 23, "gender": "F"},
+                {"subject_id": "subject14", "age": 57, "gender": "F"},
+                {"subject_id": "subject15", "age": 20, "gender": "F"},
+                {"subject_id": "subject16", "age": 27, "gender": "F"}
+            ],
+            "menopausal_subjects": [
+                {"subject_id": "subject2", "age": 47, "gender": "F", "recording_duration": "08:12:30", "nights": [1]},
+                {"subject_id": "subject4", "age": 48, "gender": "F", "recording_duration": "08:46:30", "nights": [1]},
+                {"subject_id": "subject5", "age": 46, "gender": "F", "recording_duration": "08:51:30", "nights": [1]},
+                {"subject_id": "subject7", "age": 45, "gender": "F", "recording_duration": "08:26:00", "nights": [1]},
+                {"subject_id": "subject12", "age": 54, "gender": "F", "recording_duration": "08:00:40", "nights": [1]}
+            ]
+        }
+    },
+    "summary": {
+        "total_females_45_55": {
+            "Sleep-EDF": 8,
+            "ISRUC-Sleep": 5,
+            "DREAMS": 5
+        },
+        "total_menopausal": {
+            "Sleep-EDF": 8,
+            "ISRUC-Sleep": 5,
+            "DREAMS": 5,
+            "combined": 18
+        },
+        "menopause_age_range": [45, 55],
+        "note": "DREAMS Subjects Database中16名女性中5名在45-55岁更年期年龄范围（均为健康受试者）"
+    }
+}
