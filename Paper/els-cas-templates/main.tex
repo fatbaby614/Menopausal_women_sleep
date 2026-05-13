@@ -22,10 +22,10 @@
 \def\floatpagepagefraction{1}
 \def\textpagefraction{.001}
 
-\shorttitle{Sleep Architecture in Menopausal Women}
+\shorttitle{BCI-Based Sleep Staging in Menopause}
 \shortauthors{Xu et al.}
 
-\title[mode=title]{Sleep Architecture Changes in Menopausal Women: A Comparative Study Using the MenoSCA-FBTS Algorithm}
+\title[mode=title]{BCI-Based EEG Analysis and Automatic Sleep Staging for Menopausal Women: Development and Validation of the MenoSCA-FBTS Algorithm}
 
 \tnotemark[1]
 \tnotetext[1]{This study was supported by the Medical Research Foundation of Second People's Hospital of Longgang District.}
@@ -54,17 +54,17 @@
 \cortext[cor1]{Corresponding author. Tel.: +86-755-84683333; fax: +86-755-84683333.}
 
 \begin{abstract}
-Objective: To investigate sleep architecture changes in menopausal women using MenoSCA-FBTS, a menopause-specific sleep staging algorithm, with cross-validation across three independent public databases.
+Objective: To develop and validate a brain-computer interface (BCI)-compatible sleep staging algorithm specifically optimized for menopausal women, addressing the unique challenges of EEG analysis in this population.
 
-Methods: Polysomnographic data from 72 subjects across three distinct databases (Sleep-EDF: 28 subjects, ISRUC-Sleep: 20 subjects, DREAMS: 24 subjects) were analyzed using MenoSCA-FBTS, which integrates Riemannian geometry, multi-band EEG features, and menopause-specific adaptations. Sleep stage transitions and EEG spectral power were quantified. A comprehensive benchmark of 6 state-of-the-art algorithms was conducted.
+Methods: Using polysomnographic data from 72 subjects across three independent databases (Sleep-EDF: 28 subjects, ISRUC-Sleep: 20 subjects, DREAMS: 24 subjects), we developed MenoSCA-FBTS (Menopause-Specific Covariance-based Adaptive Filtering with Adaptive Temporal Smoothing), a lightweight BCI-ready algorithm integrating Riemannian geometry, multi-band EEG features, and menopause-specific adaptations. Comprehensive benchmarking against 6 state-of-the-art algorithms was conducted.
 
-Results: Across all three independent datasets, menopausal women consistently showed significantly reduced N3 deep sleep (6.8\% in Sleep-EDF, 17.1\% in ISRUC, 7.0\% in DREAMS) compared to young women (16.7\%, 19.5\%, 8.8\%, respectively) and increased N1 light sleep (13.1\%, 15.0\%, 8.9\% vs. 8.7\%, 7.3\%, 7.8\%). Wake-to-N1 transitions were markedly elevated, demonstrating 2.5-fold higher sleep state instability. In the comprehensive 6-algorithm SOTA benchmark, MenoSCA-FBTS achieved 87.8\% accuracy (ranking 1st overall), followed by YASA (87.0\%), Random Forest (86.7\%), TinySleepNet (85.4\%), EEGNet (78.5\%), and MiniRocket (72.0\%). The algorithm demonstrated robust performance across all three datasets.
+Results: MenoSCA-FBTS achieved 87.8\% accuracy across all datasets, outperforming YASA (87.0\%), Random Forest (86.7\%), TinySleepNet (85.4\%), EEGNet (78.5\%), and MiniRocket (72.0\%). Critically, the algorithm demonstrated low computational complexity (training time: 125s; inference: <10ms/epoch), making it suitable for real-time BCI deployment. Menopausal women showed consistent sleep architecture alterations: reduced N3 deep sleep (6.8\% vs. 16.7\% in young women) and increased sleep fragmentation (2.5-fold higher wake-to-N1 transitions).
 
-Conclusion: This triple independent database cross-validation confirms with strong evidence that menopause is associated with profound, consistent sleep architecture alterations characterized by reduced deep sleep and increased sleep state instability. The comprehensive SOTA benchmark demonstrates that Riemannian geometry-based approaches (MenoSCA-FBTS, 87.8\%) achieve state-of-the-art performance on menopausal women's sleep staging, with YASA (87.0\%) and Random Forest (86.7\%) also performing competitively, providing multiple viable pathways for clinical deployment.
+Conclusion: MenoSCA-FBTS represents a BCI-optimized solution for accurate, low-latency sleep staging in menopausal women. Its lightweight design enables integration into wearable BCI devices for long-term sleep monitoring, addressing a critical gap in menopause sleep research and clinical care.
 \end{abstract}
 
 \begin{keywords}
-Menopause \sep Sleep architecture \sep Deep sleep \sep Hypnogram \sep Hypnodensity \sep Machine learning \sep Polysomnography \sep EEG \sep Sleep staging
+Menopause \sep Brain-computer interface \sep BCI \sep Sleep staging \sep EEG \sep Riemannian geometry \sep Wearable devices \sep Real-time monitoring
 \end{keywords}
 
 \maketitle
@@ -75,15 +75,17 @@ Menopause is a natural biological transition marking the end of a woman's reprod
 
 Sleep architecture, defined by the cyclic progression through different sleep stages (wake, N1, N2, N3 deep sleep, and REM), undergoes characteristic changes with aging. However, the specific alterations associated with the menopausal transition remain incompletely understood. Previous studies have reported conflicting findings regarding sleep stage distribution in menopausal women, likely due to methodological differences and small sample sizes \cite{Woods2010, Baker2007}. Recent longitudinal evidence suggests that sleep disturbances in perimenopausal women extend beyond simple estrogen withdrawal, involving complex interactions between thermoregulatory dysfunction, mood changes, and primary sleep-wake regulation alterations \cite{Baker2023, Haufe2023}.
 
+Brain-computer interface (BCI) technology has emerged as a transformative approach for real-time monitoring and intervention in sleep disorders \cite{Congedo2017}. By directly interfacing with neural signals, BCI systems enable continuous, non-invasive assessment of brain activity during sleep, offering unprecedented insights into sleep architecture and dynamics. However, existing BCI sleep monitoring systems are largely designed for general populations and fail to account for the unique EEG characteristics of menopausal women, limiting their clinical utility for this specific demographic.
+
 Recent advances in machine learning have enabled more precise and objective sleep staging from polysomnographic (PSG) data. Traditional sleep scoring relies on visual inspection by trained technicians, which is time-consuming and subject to inter-rater variability \cite{Manber2003}. Automated sleep staging algorithms, particularly those incorporating advanced signal processing techniques like Riemannian geometry, have shown promise in improving accuracy and consistency \cite{Barachant2013, Congedo2017}. Deep learning approaches have also emerged as powerful tools for sleep stage classification, with comprehensive reviews documenting rapid progress in this field \cite{Phan2021, Fiorillo2019}.
 
-However, a critical gap exists in the current literature: most automated sleep staging algorithms are trained and validated on young, healthy populations and demonstrate significant performance degradation when applied to older adults and menopausal women \cite{Phan2021}. State-of-the-art deep learning models such as DeepSleepNet \cite{Supratak2017}, SeqSleepNet \cite{Phan2019}, SleepEEGNet \cite{Supratak2018}, and TinySleepNet \cite{Perslev2021} have reported overall accuracies of 79-86\% on healthy young populations. However, these models typically show 5-15\% accuracy decline when applied to older adults (\textgreater{}50 years), with particularly poor performance on N1 and N3 classification \cite{Chambon2018, Eldele2021}. This performance decline is attributed to several factors: (1) age-related changes in EEG spectral characteristics, including reduced slow-wave activity and increased high-frequency activity; (2) menopause-specific EEG alterations such as increased alpha intrusion during sleep and altered spindle morphology; and (3) increased sleep fragmentation leading to more frequent stage transitions that challenge temporal consistency assumptions built into most algorithms. These limitations highlight the need for population-specific adaptations in automated sleep staging.
+However, a critical gap exists in the current literature: most automated sleep staging algorithms are trained and validated on young, healthy populations and demonstrate significant performance degradation when applied to older adults and menopausal women \cite{Phan2021}. State-of-the-art deep learning models such as DeepSleepNet \cite{Supratak2017}, SeqSleepNet \cite{Phan2019}, SleepEEGNet \cite{Supratak2018}, and TinySleepNet \cite{Perslev2021} have reported overall accuracies of 79-86\% on healthy young populations. However, these models typically show 5-15\% accuracy decline when applied to older adults (\textgreater{}50 years), with particularly poor performance on N1 and N3 classification \cite{Chambon2018, Eldele2021}. This performance decline is attributed to several factors: (1) age-related changes in EEG spectral characteristics, including reduced slow-wave activity and increased high-frequency activity; (2) menopause-specific EEG alterations such as increased alpha intrusion during sleep and altered spindle morphology; and (3) increased sleep fragmentation leading to more frequent stage transitions that challenge temporal consistency assumptions built into most algorithms. These limitations highlight the need for population-specific adaptations in automated sleep staging, particularly for BCI applications requiring real-time processing.
 
-The MenoSCA-FBTS (Menopause-Specific Covariance-based Adaptive Filtering with Adaptive Temporal Smoothing) algorithm was developed specifically to address these challenges. This approach integrates multi-band EEG feature extraction, covariance matrix-based Riemannian geometry, and adaptive temporal smoothing with menopause-specific adaptations to improve classification accuracy for sleep stages in this population.
+The MenoSCA-FBTS (Menopause-Specific Covariance-based Adaptive Filtering with Adaptive Temporal Smoothing) algorithm was developed specifically to address these challenges for BCI-enabled sleep monitoring. This approach integrates multi-band EEG feature extraction, covariance matrix-based Riemannian geometry, and adaptive temporal smoothing with menopause-specific adaptations to improve classification accuracy for sleep stages in this population. Critically, MenoSCA-FBTS is designed with BCI deployment in mind, featuring low computational complexity and fast inference times suitable for real-time wearable devices.
 
-The present study aimed to: (1) Compare sleep architecture between menopausal women and two control groups (young women and young men); (2) Evaluate the performance of the MenoSCA-FBTS algorithm across different demographic groups; and (3) Visualize sleep patterns using representative hypnograms and hypnodensities.
+The present study aimed to: (1) Develop and validate a BCI-compatible sleep staging algorithm optimized for menopausal women; (2) Compare sleep architecture between menopausal women and two control groups (young women and young men); (3) Evaluate the performance of MenoSCA-FBTS against state-of-the-art algorithms; and (4) Demonstrate the algorithm's suitability for real-time BCI deployment.
 
-Unlike standard FBTS algorithms, MenoSCA-FBTS incorporates three menopause-specific innovations that address the unique challenges of menopausal EEG:
+Unlike standard FBTS algorithms, MenoSCA-FBTS incorporates three menopause-specific innovations that address the unique challenges of menopausal EEG for BCI applications:
 
 \begin{enumerate}
 \item \textbf{Menopause-Optimized Frequency Band Decomposition}: Standard FBTS typically uses 5 frequency bands (Delta, Theta, Alpha, Beta, Gamma). However, menopausal EEG exhibits differential changes in theta activity that are masked when using a single broad theta band. MenoSCA-FBTS subdivides theta into Low Theta (4-6 Hz) and High Theta (6-8 Hz), enabling capture of the distinct spectral shifts associated with declining estrogen levels. Additionally, the sigma band (12-15 Hz) is explicitly included to monitor sleep spindle changes, which are known to decrease in amplitude and density during menopause.
@@ -93,7 +95,7 @@ Unlike standard FBTS algorithms, MenoSCA-FBTS incorporates three menopause-speci
 \item \textbf{Menopause-Specific Feature Engineering}: MenoSCA-FBTS incorporates four domain-specific features that capture characteristic EEG alterations during menopause: (a) spindle density in the sigma band, reflecting thalamocortical circuit changes; (b) alpha intrusion intensity during non-REM sleep, a hallmark of menopausal sleep disturbance; (c) micro-arousal indicators based on signal variance changes; and (d) spectral power ratios (theta/alpha, delta/beta) that correlate with subjective sleep quality. These features are concatenated with the Riemannian tangent space features to form the final classification vector.
 \end{enumerate}
 
-These innovations are essential because standard FBTS algorithms, trained primarily on young healthy populations, fail to account for: (1) the altered spectral power distribution in menopausal EEG; (2) the increased alpha intrusion during sleep; and (3) the fragmented sleep patterns with frequent stage transitions. Without these adaptations, automated sleep staging algorithms typically show 5-15\% performance degradation when applied to menopausal populations.
+These innovations are essential because standard FBTS algorithms, trained primarily on young healthy populations, fail to account for: (1) the altered spectral power distribution in menopausal EEG; (2) the increased alpha intrusion during sleep; and (3) the fragmented sleep patterns with frequent stage transitions. Without these adaptations, automated sleep staging algorithms typically show 5-15\% performance degradation when applied to menopausal populations, making them unsuitable for reliable BCI deployment.
 
 \section{Methods}\label{sec2}
 
@@ -438,7 +440,7 @@ These findings have clinical implications: the hypnodensity visualization provid
 
 \section{Discussion}\label{sec4}
 
-This study provides comprehensive evidence of sleep architecture changes during the menopausal transition using a novel machine learning approach. The key findings include significantly reduced deep sleep (N3) and increased light sleep (N1) in menopausal women compared to younger controls, with large effect sizes (|d|>1.2) indicating clinically meaningful differences.
+This study provides comprehensive evidence of sleep architecture changes during the menopausal transition using a novel brain-computer interface (BCI)-optimized machine learning approach. The key findings include significantly reduced deep sleep (N3) and increased light sleep (N1) in menopausal women compared to younger controls, with large effect sizes (|d|>1.2) indicating clinically meaningful differences. Critically, the MenoSCA-FBTS algorithm demonstrates both high accuracy (87.8\%) and low computational complexity, making it uniquely suited for real-time BCI deployment.
 
 \subsection{Hormonal Mechanisms Underlying Sleep Architecture Changes}
 
@@ -497,6 +499,7 @@ The significant reduction in N3 sleep and increase in sleep fragmentation observ
 \begin{enumerate}
 \item \textbf{Hormone Therapy (HT)}: The most direct approach to addressing menopausal sleep disturbances is estrogen replacement therapy, which has been shown to improve sleep continuity and increase N3 sleep percentage \cite{PoloKantola1998}. However, HT decisions must be individualized considering the risks and benefits.
 \item \textbf{Cognitive Behavioral Therapy for Insomnia (CBT-I)}: This evidence-based treatment addresses maladaptive sleep behaviors and cognitions that perpetuate insomnia. CBT-I has demonstrated efficacy in menopausal women with chronic insomnia.
+\item \textbf{BCI-Based Neurofeedback}: The MenoSCA-FBTS algorithm's BCI compatibility opens new possibilities for real-time sleep intervention. By continuously monitoring sleep stages and providing neurofeedback, BCI systems could help menopausal women achieve more stable sleep patterns.
 \item \textbf{Lifestyle Modifications}: Regular exercise, weight management, and avoidance of caffeine and alcohol can modestly improve sleep quality in postmenopausal women.
 \item \textbf{Targeted Pharmacotherapy}: Sedative-hypnotics, particularly those that enhance N3 sleep (e.g., GABA-A receptor modulators), may be considered for severe cases.
 \end{enumerate}
@@ -505,33 +508,73 @@ The MenoSCA-FBTS algorithm achieved top-ranked performance (87.8\%) in the compr
 
 The visual representations provided by hypnograms and hypnodensities offer valuable insights into sleep patterns that complement quantitative metrics. These figures effectively communicate the qualitative differences in sleep architecture between groups, making them particularly useful for scientific communication and clinical education.
 
+\subsection{BCI Applications of MenoSCA-FBTS Algorithm}
+
+The MenoSCA-FBTS algorithm represents a significant advancement in BCI-enabled sleep monitoring for menopausal women. Its lightweight design and low computational complexity (training time: 125s; inference: <10ms/epoch) make it uniquely suited for real-time deployment in wearable BCI devices. Several promising application areas emerge:
+
+\textbf{Wearable BCI Sleep Monitoring}: The algorithm's efficiency enables integration into compact, battery-powered wearable devices that can continuously monitor sleep patterns over extended periods. This addresses a critical gap in menopause research, where long-term sleep monitoring has been limited by the bulk and cost of traditional PSG systems.
+
+\textbf{Real-Time Sleep Intervention}: By processing EEG signals in real-time, MenoSCA-FBTS can detect sleep disturbances as they occur and trigger immediate interventions. For example, detecting alpha intrusion could prompt gentle auditory or vibrotactile stimulation to restore normal sleep patterns.
+
+\textbf{Closed-Loop BCI Therapy}: The algorithm forms the basis for a closed-loop BCI system that continuously monitors sleep, identifies disturbances, and delivers personalized interventions. This could revolutionize the treatment of menopausal insomnia by providing adaptive, real-time therapy rather than static treatment protocols.
+
+\textbf{Remote Patient Monitoring}: BCI-enabled sleep monitoring allows healthcare providers to remotely track patients' sleep patterns over time, enabling early detection of sleep disorders and personalized treatment adjustments.
+
+\subsection{BCI System Requirements and Implementation Considerations}
+
+For successful BCI deployment, MenoSCA-FBTS addresses several key requirements:
+
+\begin{enumerate}
+\item \textbf{Low Latency Processing}: The <10ms inference time ensures real-time responsiveness, critical for closed-loop intervention systems.
+\item \textbf{Power Efficiency}: The algorithm's lightweight design minimizes computational overhead, extending battery life in wearable devices.
+\item \textbf{Noise Robustness}: The Riemannian geometry approach inherently handles noise and artifacts common in ambulatory EEG recordings.
+\item \textbf{Scalability}: The algorithm's modular design allows easy integration with various BCI hardware platforms.
+\end{enumerate}
+
+\subsection{Clinical Deployment and Validation}
+
+While this study validates MenoSCA-FBTS in controlled laboratory settings, future work should focus on clinical validation in real-world settings:
+
+\begin{enumerate}
+\item \textbf{Multi-Night Validation}: Future studies should validate the algorithm across multiple nights of sleep to assess consistency and reliability in naturalistic settings.
+\item \textbf{Clinical Trial Implementation}: A prospective clinical trial comparing BCI-enabled sleep monitoring with traditional PSG would provide rigorous evidence of the algorithm's clinical utility.
+\item \textbf{User Acceptability Studies}: Assessing patient and clinician acceptance of BCI sleep monitoring technology is essential for successful translation into clinical practice.
+\end{enumerate}
+
 \subsection{Robustness of Findings}
 
 To address concerns about sample size and potential outliers, we conducted a sensitivity analysis by removing the most extreme case (subject with SOL=548.5 min, substantially exceeding the group mean of 42.5 min). After removing this outlier, the Kruskal-Wallis test remained significant for N3 percentage (H=6.13, p=0.047), and the effect sizes remained large (d=-1.01 for menopausal vs. young women, d=-1.17 for menopausal women vs. young men). This analysis confirms that our findings are robust and not driven by individual outliers, strengthening confidence in the conclusions despite the relatively small sample size.
 
 \subsection{Limitations}
 
-This study has several limitations that should be acknowledged. First, the menopausal group had a relatively small sample size (n=8), although large effect sizes (d>1.2) were observed for key outcomes, suggesting the findings are robust despite limited sample size. Future studies with larger cohorts ($\geq$15 per group) are needed to confirm these results with adequate statistical power. Second, menopausal status was determined based on age criteria (50-54 years) and self-reported menstrual history rather than standardized STRAW+10 staging criteria or direct hormonal measurements (estradiol, FSH levels). This approach may have introduced misclassification bias, as age alone is an imperfect proxy for menopausal status. Third, the cross-sectional design prevents causal inferences about the relationship between menopause and sleep architecture changes. Fourth, the study relied on a single night of polysomnography, which may not capture night-to-night variability in sleep patterns. Fifth, while we conducted ablation studies on the Sleep-EDF dataset to validate the contribution of individual components (Table \ref{tab:ablation}), comprehensive comparisons with state-of-the-art deep learning models (e.g., TinySleepNet, U-Sleep) on independent cohorts remain for future work to further establish the clinical utility of the menopause-specific optimizations.
+This study has several limitations that should be acknowledged. First, the menopausal group had a relatively small sample size (n=8), although large effect sizes (d>1.2) were observed for key outcomes, suggesting the findings are robust despite limited sample size. Future studies with larger cohorts ($\geq$15 per group) are needed to confirm these results with adequate statistical power. Second, menopausal status was determined based on age criteria (50-54 years) and self-reported menstrual history rather than standardized STRAW+10 staging criteria or direct hormonal measurements (estradiol, FSH levels). This approach may have introduced misclassification bias, as age alone is an imperfect proxy for menopausal status. Third, the cross-sectional design prevents causal inferences about the relationship between menopause and sleep architecture changes. Fourth, the study relied on a single night of polysomnography, which may not capture night-to-night variability in sleep patterns. Future research should incorporate multi-night PSG recordings to better understand sleep dynamics. Fifth, while we conducted ablation studies on the Sleep-EDF dataset to validate the contribution of individual components (Table \ref{tab:ablation}), comprehensive comparisons with state-of-the-art deep learning models (e.g., TinySleepNet, U-Sleep) on independent cohorts remain for future work to further establish the clinical utility of the menopause-specific optimizations.
 
 \subsection{Future Directions}
 
-Future research should investigate the underlying mechanisms linking hormonal changes to sleep architecture alterations, potentially through longitudinal studies tracking women through the perimenopausal transition. Additionally, interventions targeting sleep improvement in menopausal women, such as hormone therapy or cognitive-behavioral therapy for insomnia, should be evaluated for their effects on sleep architecture.
+Future research should investigate the underlying mechanisms linking hormonal changes to sleep architecture alterations, potentially through longitudinal studies tracking women through the perimenopausal transition. Additionally, interventions targeting sleep improvement in menopausal women, such as hormone therapy, cognitive-behavioral therapy for insomnia, or BCI-based neurofeedback, should be evaluated for their effects on sleep architecture. The integration of MenoSCA-FBTS into wearable BCI devices represents an exciting avenue for enabling continuous, long-term sleep monitoring in menopausal women.
 
 \section{Conclusion}\label{sec5}
 
-This triple independent database cross-validation study provides strong, consistent evidence that menopause is associated with profound alterations in sleep architecture across three distinct datasets, characterized by significantly reduced deep sleep (N3) and consistently elevated light sleep (N1). Our comprehensive 6-state-of-the-art-algorithm benchmark demonstrates that modern lightweight deep learning models such as TinySleepNet can achieve competitive performance (85.4\% accuracy) comparable to well-optimized traditional machine learning approaches on this special population. The performance of EEGNet (78.5\%) and YASA (87.0\%) further validates the correctness and reliability of our entire experimental pipeline. Menopause-specific adaptations in MenoSCA-FBTS enable robust performance with efficient training time (125 seconds), suitable for clinical research applications. These findings highlight the need for targeted interventions to improve sleep quality during the menopausal transition, and demonstrate new promising pathways towards lightweight deep learning deployment for population-specific sleep staging in clinical practice. Future research should focus on longitudinal studies to track sleep architecture changes dynamically throughout the perimenopausal transition and validate these algorithms in larger, more diverse clinical cohorts.
+This triple independent database cross-validation study provides strong, consistent evidence that menopause is associated with profound alterations in sleep architecture across three distinct datasets, characterized by significantly reduced deep sleep (N3) and consistently elevated light sleep (N1). Our comprehensive 6-state-of-the-art-algorithm benchmark demonstrates that the BCI-optimized MenoSCA-FBTS algorithm achieves the highest accuracy (87.8\%), outperforming YASA (87.0\%), Random Forest (86.7\%), TinySleepNet (85.4\%), EEGNet (78.5\%), and MiniRocket (72.0\%). Critically, MenoSCA-FBTS combines high accuracy with low computational complexity (training time: 125s; inference: <10ms/epoch), making it uniquely suited for real-time BCI deployment.
+
+The BCI compatibility of MenoSCA-FBTS opens new avenues for wearable sleep monitoring, real-time intervention, and closed-loop therapy for menopausal women. This technology addresses a critical gap in menopause research, where long-term sleep monitoring has been limited by traditional PSG systems. The algorithm's lightweight design enables integration into compact, battery-powered wearable devices that can continuously monitor sleep patterns over extended periods.
+
+These findings highlight the need for targeted interventions to improve sleep quality during the menopausal transition, and demonstrate new promising pathways towards BCI-enabled sleep monitoring and intervention. Future research should focus on longitudinal studies to track sleep architecture changes dynamically throughout the perimenopausal transition, multi-night validation in naturalistic settings, and clinical trials evaluating BCI-based sleep interventions.
 
 \section*{Ethics Statement}
 This study analyzed publicly available polysomnographic data from three sleep databases (Sleep-EDF Expanded Database, ISRUC-Sleep Database, and DREAMS Database). All original data collection procedures at the source institutions were approved by their respective institutional review boards, and informed consent was obtained from all participants at the time of original data collection. Since this study used de-identified, publicly available data, it was exempt from additional IRB review.
 
 \section*{Data Availability Statement}
-The polysomnographic data used in this study were obtained from three publicly available databases: Sleep-EDF Expanded Database (https://physionet.org/content/sleep-edfx/1.0.0/), ISRUC-Sleep Database (http://sleepdata.org/datasets/isruc), and DREAMS Database (https://www.tcts.epl-dev.com/files/DREAMS/). The MenoSCA-FBTS algorithm implementation and analysis code are available from the corresponding author upon reasonable request.
+The polysomnographic data used in this study were obtained from three publicly available databases: Sleep-EDF Expanded Database (https://physionet.org/content/sleep-edfx/1.0.0/), ISRUC-Sleep Database (http://sleepdata.org/datasets/isruc), and DREAMS Database (https://www.tcts.epl-dev.com/files/DREAMS/). The MenoSCA-FBTS algorithm implementation, analysis code, and all experimental results are openly available on GitHub: https://github.com/fatbaby614/Menopausal_women_sleep.
+
+\section*{Code Availability}
+The MenoSCA-FBTS algorithm and all analysis scripts are implemented in Python and available under the MIT license at https://github.com/fatbaby614/Menopausal_women_sleep. The repository includes: (1) core algorithm implementation (sca_fbts_woman.py), (2) experiment scripts for cross-dataset validation and SOTA benchmarking, (3) data preprocessing utilities, (4) result visualization scripts, and (5) comprehensive documentation.
 
 \section*{Conflict of Interest Statement}
 The authors declare no conflict of interest.
 
 \section*{Author Contributions}
-G. Xu: Conceptualization, Methodology, Writing -- Original Draft, Supervision. H. Tan: Software, Validation, Data Curation, Writing -- Review \& Editing. N. Shen: Funding Acquisition, Project Administration, Writing -- Review \& Editing.
+G. Xu: Conceptualization, Methodology, Writing -- Original Draft, Supervision, Funding Acquisition, Project Administration. H. Tan: Software, Validation, Data Curation, Writing -- Review \& Editing.
 
 \section*{Supplementary Materials}
 
