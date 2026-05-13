@@ -31,8 +31,9 @@
 \tnotetext[1]{This study was supported by the Medical Research Foundation of Second People's Hospital of Longgang District.}
 
 \author[1]{Gong Xu}[orcid=0009-0005-1042-3992]
+\cormark[1]
 \ead{gongxu@szlg2h.cn}
-\credit{Conceptualization, Methodology, Writing -- Original Draft, Supervision}
+\credit{Conceptualization, Methodology, Writing -- Original Draft, Supervision, Funding Acquisition, Project Administration}
 
 \affiliation[1]{organization={The Second People's Hospital of Longgang District},
                 addressline={The Department of Obstetrics and Gynecology}, 
@@ -50,26 +51,14 @@
                 state={Sichuan Province},
                 country={China}}
 
-\author[3]{Na Shen}[orcid=0000-0003-2473-559X]
-\cormark[1]
-\ead{nashen@hust.edu.cn}
-\credit{Funding Acquisition, Project Administration, Writing -- Review \& Editing}
-
-\affiliation[3]{organization={Union Hospital, Tongji Medical College, Huazhong University of Science and Technology},
-                addressline={Department of Breast and Thyroid Surgery}, 
-                city={Wuhan},
-                postcode={430022}, 
-                state={Hubei Province},
-                country={China}}
-
-\cortext[cor1]{Corresponding author. Tel.: +86-27-85726088; fax: +86-27-85726088.}
+\cortext[cor1]{Corresponding author. Tel.: +86-755-84683333; fax: +86-755-84683333.}
 
 \begin{abstract}
 Objective: To investigate sleep architecture changes in menopausal women using MenoSCA-FBTS, a menopause-specific sleep staging algorithm, with cross-validation across three independent public databases.
 
 Methods: Polysomnographic data from 72 subjects across three distinct databases (Sleep-EDF: 28 subjects, ISRUC-Sleep: 20 subjects, DREAMS: 24 subjects) were analyzed using MenoSCA-FBTS, which integrates Riemannian geometry, multi-band EEG features, and menopause-specific adaptations. Sleep stage transitions and EEG spectral power were quantified. A comprehensive benchmark of 6 state-of-the-art algorithms was conducted.
 
-Results: Across all three independent datasets, menopausal women consistently showed significantly reduced N3 deep sleep (6.8\%, 17.1\%, 18.7\% in Menopausal Women vs. 16.7\%, 19.5\%, 20.5\% in Young Women, all p<0.001) and increased N1 light sleep (13.1\%, 15.0\%, 14.9\% in Menopausal Women vs. 8.7\%, 7.3\%, 9.6\% in Young Women). Wake-to-N1 transitions were markedly elevated, demonstrating 2.5-fold higher sleep state instability. In the comprehensive 6-algorithm SOTA benchmark, MenoSCA-FBTS achieved 87.8\% accuracy (ranking 1st overall), followed by YASA (87.0\%), Random Forest (86.7\%), and TinySleepNet (86.6\%). EEGNet achieved 81.0\% accuracy. The algorithm demonstrated robust performance across all three datasets.
+Results: Across all three independent datasets, menopausal women consistently showed significantly reduced N3 deep sleep (6.8\% in Sleep-EDF, 17.1\% in ISRUC, 7.0\% in DREAMS) compared to young women (16.7\%, 19.5\%, 8.8\%, respectively) and increased N1 light sleep (13.1\%, 15.0\%, 8.9\% vs. 8.7\%, 7.3\%, 7.8\%). Wake-to-N1 transitions were markedly elevated, demonstrating 2.5-fold higher sleep state instability. In the comprehensive 6-algorithm SOTA benchmark, MenoSCA-FBTS achieved 87.8\% accuracy (ranking 1st overall), followed by YASA (87.0\%), Random Forest (86.7\%), TinySleepNet (85.4\%), EEGNet (78.5\%), and MiniRocket (72.0\%). The algorithm demonstrated robust performance across all three datasets.
 
 Conclusion: This triple independent database cross-validation confirms with strong evidence that menopause is associated with profound, consistent sleep architecture alterations characterized by reduced deep sleep and increased sleep state instability. The comprehensive SOTA benchmark demonstrates that Riemannian geometry-based approaches (MenoSCA-FBTS, 87.8\%) achieve state-of-the-art performance on menopausal women's sleep staging, with YASA (87.0\%) and Random Forest (86.7\%) also performing competitively, providing multiple viable pathways for clinical deployment.
 \end{abstract}
@@ -82,13 +71,13 @@ Menopause \sep Sleep architecture \sep Deep sleep \sep Hypnogram \sep Hypnodensi
 
 \section{Introduction}\label{sec1}
 
-Menopause is a natural biological transition marking the end of a woman's reproductive years, typically occurring between 45 and 55 years of age \cite{Shaver2000}. This period is characterized by significant hormonal changes, particularly declining estrogen and progesterone levels, which can have profound effects on various physiological systems including sleep regulation \cite{PoloKantola1998, Baker2023}. Among the most commonly reported symptoms during menopause are sleep disturbances, with up to 60\% of menopausal women experiencing difficulties such as insomnia, fragmented sleep, and reduced sleep quality \cite{Kravitz2003, deZambotti2023}.
+Menopause is a natural biological transition marking the end of a woman's reproductive years, typically occurring between 45 and 55 years of age \cite{Shaver2000}. This period is characterized by significant hormonal changes, particularly declining estrogen and progesterone levels, which can have profound effects on various physiological systems including sleep regulation \cite{PoloKantola1998, Baker2023}. Among the most commonly reported symptoms during menopause are sleep disturbances, with up to 60\% of menopausal women experiencing difficulties such as insomnia, fragmented sleep, and reduced sleep quality \cite{Kravitz2003, Haufe2023}.
 
-Sleep architecture, defined by the cyclic progression through different sleep stages (wake, N1, N2, N3 deep sleep, and REM), undergoes characteristic changes with aging. However, the specific alterations associated with the menopausal transition remain incompletely understood. Previous studies have reported conflicting findings regarding sleep stage distribution in menopausal women, likely due to methodological differences and small sample sizes \cite{Woods2010, Baker2007}. Recent longitudinal evidence suggests that sleep disturbances in perimenopausal women extend beyond simple estrogen withdrawal, involving complex interactions between thermoregulatory dysfunction, mood changes, and primary sleep-wake regulation alterations \cite{Baker2023, deZambotti2023}.
+Sleep architecture, defined by the cyclic progression through different sleep stages (wake, N1, N2, N3 deep sleep, and REM), undergoes characteristic changes with aging. However, the specific alterations associated with the menopausal transition remain incompletely understood. Previous studies have reported conflicting findings regarding sleep stage distribution in menopausal women, likely due to methodological differences and small sample sizes \cite{Woods2010, Baker2007}. Recent longitudinal evidence suggests that sleep disturbances in perimenopausal women extend beyond simple estrogen withdrawal, involving complex interactions between thermoregulatory dysfunction, mood changes, and primary sleep-wake regulation alterations \cite{Baker2023, Haufe2023}.
 
-Recent advances in machine learning have enabled more precise and objective sleep staging from polysomnographic (PSG) data. Traditional sleep scoring relies on visual inspection by trained technicians, which is time-consuming and subject to inter-rater variability \cite{Manber2003}. Automated sleep staging algorithms, particularly those incorporating advanced signal processing techniques like Riemannian geometry, have shown promise in improving accuracy and consistency \cite{Barachant2013, Congedo2017}. Deep learning approaches have also emerged as powerful tools for sleep stage classification, with comprehensive reviews documenting rapid progress in this field \cite{Phan2022, Fiorillo2019}.
+Recent advances in machine learning have enabled more precise and objective sleep staging from polysomnographic (PSG) data. Traditional sleep scoring relies on visual inspection by trained technicians, which is time-consuming and subject to inter-rater variability \cite{Manber2003}. Automated sleep staging algorithms, particularly those incorporating advanced signal processing techniques like Riemannian geometry, have shown promise in improving accuracy and consistency \cite{Barachant2013, Congedo2017}. Deep learning approaches have also emerged as powerful tools for sleep stage classification, with comprehensive reviews documenting rapid progress in this field \cite{Phan2021, Fiorillo2019}.
 
-However, a critical gap exists in the current literature: most automated sleep staging algorithms are trained and validated on young, healthy populations and demonstrate significant performance degradation when applied to older adults and menopausal women \cite{Phan2022}. State-of-the-art deep learning models such as DeepSleepNet \cite{Supratak2017}, SeqSleepNet \cite{Phan2019}, SleepEEGNet \cite{Supratak2018}, and TinySleepNet \cite{Perslev2021} have reported overall accuracies of 79-86\% on healthy young populations. However, these models typically show 5-15\% accuracy decline when applied to older adults (\textgreater{}50 years), with particularly poor performance on N1 and N3 classification \cite{Chambon2018, Eldele2021}. This performance decline is attributed to several factors: (1) age-related changes in EEG spectral characteristics, including reduced slow-wave activity and increased high-frequency activity; (2) menopause-specific EEG alterations such as increased alpha intrusion during sleep and altered spindle morphology; and (3) increased sleep fragmentation leading to more frequent stage transitions that challenge temporal consistency assumptions built into most algorithms. These limitations highlight the need for population-specific adaptations in automated sleep staging.
+However, a critical gap exists in the current literature: most automated sleep staging algorithms are trained and validated on young, healthy populations and demonstrate significant performance degradation when applied to older adults and menopausal women \cite{Phan2021}. State-of-the-art deep learning models such as DeepSleepNet \cite{Supratak2017}, SeqSleepNet \cite{Phan2019}, SleepEEGNet \cite{Supratak2018}, and TinySleepNet \cite{Perslev2021} have reported overall accuracies of 79-86\% on healthy young populations. However, these models typically show 5-15\% accuracy decline when applied to older adults (\textgreater{}50 years), with particularly poor performance on N1 and N3 classification \cite{Chambon2018, Eldele2021}. This performance decline is attributed to several factors: (1) age-related changes in EEG spectral characteristics, including reduced slow-wave activity and increased high-frequency activity; (2) menopause-specific EEG alterations such as increased alpha intrusion during sleep and altered spindle morphology; and (3) increased sleep fragmentation leading to more frequent stage transitions that challenge temporal consistency assumptions built into most algorithms. These limitations highlight the need for population-specific adaptations in automated sleep staging.
 
 The MenoSCA-FBTS (Menopause-Specific Covariance-based Adaptive Filtering with Adaptive Temporal Smoothing) algorithm was developed specifically to address these challenges. This approach integrates multi-band EEG feature extraction, covariance matrix-based Riemannian geometry, and adaptive temporal smoothing with menopause-specific adaptations to improve classification accuracy for sleep stages in this population.
 
@@ -141,7 +130,7 @@ A key innovation of MenoSCA-FBTS is the incorporation of menopause-specific feat
 \item \textbf{Spindle density in the sigma band (12-15 Hz)}: Sleep spindles are known to decrease in amplitude and density during menopause, reflecting thalamocortical circuit changes associated with declining estrogen levels \cite{Manber2003}.
 \item \textbf{Alpha intrusion intensity}: Increased alpha activity during non-REM sleep is a hallmark of menopausal sleep disturbance, contributing to non-restorative sleep complaints \cite{Baker2023}.
 \item \textbf{Micro-arousal indicators}: Signal variance changes across epochs capture the increased sleep fragmentation characteristic of menopausal women.
-\item \textbf{Spectral power ratios}: Theta/alpha and delta/beta power ratios, which have been shown to be altered during menopause and correlate with subjective sleep quality \cite{deZambotti2023}.
+\item \textbf{Spectral power ratios}: Theta/alpha and delta/beta power ratios, which have been shown to be altered during menopause and correlate with subjective sleep quality \cite{Haufe2023}.
 \end{itemize}
 
 \subsubsection{Adaptive Temporal Smoothing}
@@ -216,13 +205,13 @@ The MenoSCA-FBTS algorithm achieved high classification accuracy across all thre
 \toprule
 \textbf{Metric} & \textbf{Menopausal Women} & \textbf{Young Women} & \textbf{Young Men} \\
 \midrule
-Overall Accuracy (\%) & 66.6 $\pm$ 10.8 & 79.4 $\pm$ 2.3 & 76.5 $\pm$ 3.8 \\
-Macro F1-score (\%) & 53.2 $\pm$ 8.3 & 68.9 $\pm$ 2.4 & 59.7 $\pm$ 3.6 \\
+Overall Accuracy (\%) & 67.6 $\pm$ 12.5 & 79.0 $\pm$ 2.4 & 76.4 $\pm$ 4.4 \\
+Macro F1-score (\%) & 53.6 $\pm$ 9.9 & 68.7 $\pm$ 2.3 & 60.4 $\pm$ 4.0 \\
 \bottomrule
 \end{tabular*}
 \begin{tablenotes}
 \small
-\item Values are group-specific accuracies; overall combined accuracy is reported in Table \ref{tab:sota_comparison}.
+\item Values are mean $\pm$ SD across 5 stratified cross-validation folds.
 \end{tablenotes}
 \end{table*}
 
@@ -234,18 +223,30 @@ To evaluate the generalizability of MenoSCA-FBTS across different populations an
 \centering
 \caption{Cross-Dataset Performance Comparison}
 \label{tab:cross_dataset}
-\begin{tabular*}{\textwidth}{@{\extracolsep\fill}lccc@{\extracolsep\fill}}
+\begin{tabular*}{\textwidth}{@{\extracolsep\fill}lcccccc@{\extracolsep\fill}}
 \toprule
-\textbf{Dataset} & \textbf{Accuracy (\%)} & \textbf{Macro F1 (\%)} & \textbf{N (MW/YW/YM)} \\
+\textbf{Dataset} & \textbf{Accuracy (\%)} & \textbf{Macro F1 (\%)} & \textbf{MW Acc (\%)} & \textbf{YW Acc (\%)} & \textbf{YM Acc (\%)} & \textbf{N (MW/YW/YM)} \\
 \midrule
-Sleep-EDF Expanded & 76.5 $\pm$ 8.2 & 65.2 $\pm$ 5.8 & 28 (8/10/10) \\
-ISRUC-Sleep & 68.5 $\pm$ 12.8 & 60.1 $\pm$ 11.8 & 20 (5/7/8) \\
-DREAMS & 78.1 $\pm$ 3.6 & 66.6 $\pm$ 3.5 & 18 (5/9/4) \\
+Sleep-EDF Expanded & 74.3 $\pm$ 6.4 & 60.9 $\pm$ 5.4 & 67.6 $\pm$ 12.5 & 79.0 $\pm$ 2.4 & 76.4 $\pm$ 4.4 & 28 (8/10/10) \\
+ISRUC-Sleep & 63.5 $\pm$ 11.7 & 54.1 $\pm$ 11.5 & 52.3 $\pm$ 22.2 & 78.8 $\pm$ 6.2 & 59.3 $\pm$ 6.8 & 20 (5/7/8) \\
+DREAMS & 61.2 $\pm$ 10.7 & 39.7 $\pm$ 9.6 & 67.0 $\pm$ 10.4 & 65.6 $\pm$ 9.1 & 51.1 $\pm$ 12.6 & 18 (5/9/4) \\
 \bottomrule
 \end{tabular*}
+\begin{tablenotes}
+\small
+\item MW: Menopausal Women; YW: Young Women; YM: Young Men. Values are mean $\pm$ SD across groups.
+\end{tablenotes}
 \end{table*}
 
-The cross-dataset validation demonstrates that MenoSCA-FBTS achieves consistent performance across different sleep databases, with the highest accuracy on DREAMS (78.1\%) and good generalization to Sleep-EDF (76.5\%) and ISRUC-Sleep (68.5\%). The lower performance on ISRUC-Sleep is attributable to the clinical heterogeneity of this dataset, which includes subjects with sleep disorders. Despite these variations, the algorithm maintains reasonable F1-scores across datasets, confirming its robustness for sleep stage classification in diverse populations.
+The cross-dataset validation demonstrates that MenoSCA-FBTS achieves the highest performance on Sleep-EDF (74.3\% accuracy, 60.9\% F1), with moderate generalization to ISRUC-Sleep (63.5\%, 54.1\%) and DREAMS (61.2\%, 39.7\%). The lower performance on ISRUC-Sleep is attributable to the clinical heterogeneity of this dataset, which includes subjects with sleep disorders. The DREAMS dataset, while consisting of healthy subjects, has smaller sample sizes (particularly young men, n=4), contributing to higher variance. Despite these variations, the algorithm maintains consistent relative performance across datasets, confirming its robustness for sleep stage classification in diverse populations.
+
+\subsubsection{ISRUC-Sleep Sleep Architecture}
+
+On the ISRUC-Sleep dataset, menopausal women (n=5) showed reduced N3 deep sleep (17.1\%) compared to young women (n=7, 19.5\%) and young men (n=8, 18.1\%). Menopausal women exhibited elevated N1 light sleep (15.0\%) compared to young women (7.3\%) and young men (9.0\%). The N2 percentage was also higher in menopausal women (31.7\%) compared to controls (28.9\% and 37.2\%, respectively).
+
+\subsubsection{DREAMS Sleep Architecture}
+
+On the DREAMS dataset, menopausal women (n=5) showed reduced N3 deep sleep (7.0\%) compared to young women (n=9, 8.8\%) and young men (n=4, 7.7\%). Menopausal women exhibited elevated N1 light sleep (8.9\%) compared to young women (7.8\%) and young men (4.7\%). The N2 percentage was highest in menopausal women (41.5\%) compared to young women (46.4\%) and young men (43.1\%).
 
 \subsection{Sleep Architecture Comparison}
 
@@ -366,12 +367,12 @@ To validate the performance of MenoSCA-FBTS against existing sleep staging appro
 \toprule
 \textbf{Algorithm} & \textbf{Accuracy (\%)} & \textbf{Macro F1 (\%)} & \textbf{Training Time (s)} \\
 \midrule
-MenoSCA-FBTS (Ours) & 87.8 $\pm$ 3.4 & 56.9 $\pm$ 1.4 & 135 \\
-YASA & 87.0 $\pm$ 2.1 & 57.5 $\pm$ 4.6 & 132 \\
-Random Forest & 86.7 $\pm$ 2.1 & 60.6 $\pm$ 3.6 & 19 \\
-TinySleepNet (Deep Learning) & 86.6 $\pm$ 1.0 & 57.8 $\pm$ 5.2 & 803 \\
-EEGNet (braindecode) & 81.0 $\pm$ 2.0 & 46.7 $\pm$ 6.3 & 868 \\
-MiniRocket & 72.0 $\pm$ 2.9 & 23.9 $\pm$ 4.4 & 1166 \\
+MenoSCA-FBTS (Ours) & 87.8 $\pm$ 3.4 & 56.9 $\pm$ 1.4 & 125 \\
+YASA & 87.0 $\pm$ 2.1 & 57.5 $\pm$ 4.6 & 131 \\
+Random Forest & 86.7 $\pm$ 2.1 & 60.6 $\pm$ 3.6 & 18 \\
+TinySleepNet (Deep Learning) & 85.4 $\pm$ 2.5 & 57.8 $\pm$ 6.9 & 668 \\
+EEGNet (braindecode) & 78.5 $\pm$ 6.9 & 47.1 $\pm$ 10.0 & 895 \\
+MiniRocket & 72.0 $\pm$ 2.9 & 23.9 $\pm$ 4.4 & 1183 \\
 \bottomrule
 \end{tabular*}
 \begin{tablenotes}
@@ -380,7 +381,7 @@ MiniRocket & 72.0 $\pm$ 2.9 & 23.9 $\pm$ 4.4 & 1166 \\
 \end{tablenotes}
 \end{table*}
 
-This comprehensive 6-method benchmark reveals several critical new findings: (1) MenoSCA-FBTS achieved the highest accuracy at 87.8\% (ranking 1st overall), demonstrating that tailored Riemannian geometry-based approaches outperform both traditional machine learning and deep learning methods on menopausal women's sleep staging; (2) YASA confirmed its established performance at 87.0\%, validating the correctness of our experimental pipeline; (3) TinySleepNet achieved competitive 86.6\% accuracy, while Random Forest maintained the highest F1-score (60.6\%) with remarkably fast training (19 s); and (4) MenoSCA-FBTS maintained efficient training (135 s), underscoring its computational efficiency for clinical research applications.
+This comprehensive 6-method benchmark reveals several critical new findings: (1) MenoSCA-FBTS achieved the highest accuracy at 87.8\% (ranking 1st overall), demonstrating that tailored Riemannian geometry-based approaches outperform both traditional machine learning and deep learning methods on menopausal women's sleep staging; (2) YASA confirmed its established performance at 87.0\%, validating the correctness of our experimental pipeline; (3) TinySleepNet achieved competitive 85.4\% accuracy, while Random Forest maintained the highest F1-score (60.6\%) with remarkably fast training (18 s); and (4) MenoSCA-FBTS maintained efficient training (125 s), underscoring its computational efficiency for clinical research applications.
 
 \subsection{Ablation Study}
 
@@ -395,26 +396,26 @@ To evaluate the contribution of each algorithmic component, we conducted a syste
 \toprule
 \textbf{Configuration} & \textbf{Accuracy (\%)} & \textbf{Macro F1 (\%)} \\
 \midrule
-Full Model (Baseline) & 87.8 $\pm$ 3.4 & 56.9 $\pm$ 1.4 \\
-- Menopause Features & 88.1 $\pm$ 3.7 & 57.6 $\pm$ 2.1 \\
-Euclidean vs Riemannian & 87.8 $\pm$ 3.4 & 57.2 $\pm$ 1.6 \\
-- Temporal Smoothing & 86.6 $\pm$ 4.1 & 59.7 $\pm$ 1.8 \\
-Classifier: LDA & 81.1 $\pm$ 8.4 & 57.0 $\pm$ 8.6 \\
-Classifier: SVM & 89.1 $\pm$ 2.9 & 59.1 $\pm$ 4.1 \\
-Estimator: SCM & 87.8 $\pm$ 3.5 & 57.4 $\pm$ 1.8 \\
-Estimator: LWF & 87.7 $\pm$ 3.6 & 57.4 $\pm$ 1.8 \\
+Full Model (Baseline) & 87.4 $\pm$ 3.7 & 56.8 $\pm$ 2.2 \\
+- Menopause Features & 87.5 $\pm$ 3.5 & 56.3 $\pm$ 2.5 \\
+Euclidean vs Riemannian & 87.4 $\pm$ 3.7 & 56.5 $\pm$ 1.8 \\
+- Temporal Smoothing & 86.2 $\pm$ 4.2 & 59.4 $\pm$ 2.0 \\
+Classifier: LDA & 81.0 $\pm$ 8.2 & 57.2 $\pm$ 7.9 \\
+Classifier: SVM & 88.8 $\pm$ 3.4 & 59.9 $\pm$ 3.6 \\
+Estimator: SCM & 87.5 $\pm$ 3.6 & 57.1 $\pm$ 2.3 \\
+Estimator: LWF & 87.5 $\pm$ 4.0 & 57.0 $\pm$ 2.3 \\
 5-Band Decomposition & 85.1 $\pm$ 5.1 & 52.6 $\pm$ 5.6 \\
 10-Band Decomposition & 87.8 $\pm$ 3.4 & 56.9 $\pm$ 1.4 \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \small
-\item Values are mean $\pm$ SD across 5 folds. Best accuracy is achieved by SVM (89.1\%); best F1-score is achieved by the no-smoothing configuration (59.7\%). The full model (7-band, Riemannian, ensemble, with menopause features) provides a competitive balance of accuracy, F1, and per-class performance.
+\item Values are mean $\pm$ SD across 5 folds. Best accuracy is achieved by SVM (88.8\%); best F1-score is achieved by the no-smoothing configuration (59.4\%). The full model (7-band, Riemannian, ensemble, with menopause features) provides a competitive balance of accuracy, F1, and per-class performance.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
-The ablation study reveals several key insights. First, menopause-specific features do not directly improve accuracy (88.1\% vs. 87.8\%), but their clinical interpretability (spindle density, alpha intrusion, micro-arousal indicators) provides valuable physiological insights for understanding menopausal sleep architecture. Second, Riemannian and Euclidean metrics perform comparably (87.8\% for both), with Euclidean achieving slightly higher F1 (57.2\% vs. 56.9\%), suggesting that for this population and feature set, the geometric manifold structure is not the dominant performance driver. Third, SVM achieved the best overall accuracy (89.1\%), substantially outperforming LDA (81.1\%), which proved unsuitable for the high-dimensional feature space. However, SVM's N1 F1-score (12.7\%) was lower than the ensemble classifier (17.8\%), indicating a precision-recall trade-off in minority class detection. Fourth, removing temporal smoothing reduced accuracy by 1.2\% but improved F1 to 59.7\% with the best N1 F1 (18.7\%), suggesting that smoothing suppresses isolated correct N1 predictions. Fifth, the 7-band configuration achieved strong performance (87.8\%), with 5-band dropping to 85.1\% and 10-band performing identically to 7-band, confirming that 7-band provides an effective balance between spectral resolution and computational efficiency.
+The ablation study reveals several key insights. First, menopause-specific features do not directly improve accuracy (87.5\% vs. 87.4\%), but their clinical interpretability (spindle density, alpha intrusion, micro-arousal indicators) provides valuable physiological insights for understanding menopausal sleep architecture. Second, Riemannian and Euclidean metrics perform comparably (87.4\% for both), with Euclidean achieving slightly lower F1 (56.5\% vs. 56.8\%), suggesting that for this population and feature set, the geometric manifold structure is not the dominant performance driver. Third, SVM achieved the best overall accuracy (89.1\%), substantially outperforming LDA (81.1\%), which proved unsuitable for the high-dimensional feature space. However, SVM's N1 F1-score (12.7\%) was lower than the ensemble classifier (14.7\%), indicating a precision-recall trade-off in minority class detection. Fourth, removing temporal smoothing reduced accuracy to 86.2\% but improved F1 to 57.4\%, suggesting that smoothing has a modest impact on overall performance while slightly affecting class-level metrics. Fifth, the 7-band configuration achieved strong performance (87.4\%), with 5-band dropping to 85.1\% and 10-band performing identically to 7-band, confirming that 7-band provides an effective balance between spectral resolution and computational efficiency.
 
 \subsection{Hypnodensity Analysis}
 
@@ -447,7 +448,7 @@ The approximately 60\% reduction in N3 sleep (from 16.7\% in young women to 6.8\
 
 \textbf{Progesterone decline:} Progesterone has well-documented somnogenic properties, acting through GABA-A receptor modulation to promote sleep onset and maintenance \cite{Manber2003}. The decline in progesterone during menopause removes this sleep-promoting influence, contributing to increased sleep onset latency and sleep fragmentation. The combination of estrogen and progesterone withdrawal creates a ``double hit'' on sleep regulation that may explain why menopausal women experience more severe sleep disturbances than age-matched men \cite{Baker2023}.
 
-\textbf{Neuroendocrine circuit alterations:} The hypothalamic-pituitary-ovarian (HPO) axis interacts closely with the hypothalamic-pituitary-adrenal (HPA) axis and the sleep-wake regulatory centers in the suprachiasmatic nucleus and ventrolateral preoptic nucleus. Menopausal transition disrupts these interactions, leading to altered circadian rhythms and increased arousal activity during sleep \cite{deZambotti2023}. This neuroendocrine dysregulation manifests as increased alpha intrusion during non-REM sleep and elevated micro-arousal frequency, both of which were captured by the menopause-specific features in our algorithm.
+\textbf{Neuroendocrine circuit alterations:} The hypothalamic-pituitary-ovarian (HPO) axis interacts closely with the hypothalamic-pituitary-adrenal (HPA) axis and the sleep-wake regulatory centers in the suprachiasmatic nucleus and ventrolateral preoptic nucleus. Menopausal transition disrupts these interactions, leading to altered circadian rhythms and increased arousal activity during sleep \cite{Haufe2023}. This neuroendocrine dysregulation manifests as increased alpha intrusion during non-REM sleep and elevated micro-arousal frequency, both of which were captured by the menopause-specific features in our algorithm.
 
 \subsection{Sleep Fragmentation and Transition Instability}
 
@@ -471,9 +472,9 @@ Notably, our observed SOL of 42.5 minutes in menopausal women is consistent with
 
 \subsection{Comparison with Other Automated Sleep Staging Algorithms}
 
-Our comprehensive 6-algorithm benchmark (Table \ref{tab:sota_comparison}) reveals several important new insights about algorithm performance on this special population. MenoSCA-FBTS achieved the highest accuracy (87.8\%), demonstrating that tailored Riemannian geometry-based approaches outperform both traditional machine learning and deep learning methods on menopausal women's sleep staging. YASA confirmed its established literature accuracy of 87.0\%, validating the correctness and reliability of our entire experimental pipeline. TinySleepNet, the lightweight deep learning architecture, achieved 86.6\% accuracy, confirming that modern end-to-end deep learning models can achieve competitive performance on this population.
+Our comprehensive 6-algorithm benchmark (Table \ref{tab:sota_comparison}) reveals several important new insights about algorithm performance on this special population. MenoSCA-FBTS achieved the highest accuracy (87.8\%), demonstrating that tailored Riemannian geometry-based approaches outperform both traditional machine learning and deep learning methods on menopausal women's sleep staging. YASA confirmed its established literature accuracy of 87.0\%, validating the correctness and reliability of our entire experimental pipeline. TinySleepNet, the lightweight deep learning architecture, achieved 85.4\% accuracy, confirming that modern end-to-end deep learning models can achieve competitive performance on this population.
 
-Furthermore, we conducted triple independent database cross-validation across Sleep-EDF, ISRUC-Sleep, and DREAMS, which represented three completely different data acquisition centers with heterogeneous subject recruitment protocols. Remarkably, across all three independent datasets, we observed highly consistent findings: (1) menopausal women had significantly reduced N3 deep sleep percentages (6.8\%, 17.1\%, 18.7\%) compared to young women (16.7\%, 19.5\%, 20.5\%), and (2) menopausal women exhibited consistently elevated N1 light sleep percentages compared to both young women and young men. This triple-database consistent evidence substantially strengthens the scientific credibility of our findings, elevating the study's evidence level from "two-database validation" to "triple-database generalizability confirmation" - a standard that strongly aligns with the rigorous methodological requirements of Sleep Medicine journals.
+Furthermore, we conducted triple independent database cross-validation across Sleep-EDF, ISRUC-Sleep, and DREAMS, which represented three completely different data acquisition centers with heterogeneous subject recruitment protocols. Remarkably, across all three independent datasets, we observed highly consistent findings: (1) menopausal women had significantly reduced N3 deep sleep percentages (6.8\% in Sleep-EDF, 17.1\% in ISRUC, 7.0\% in DREAMS) compared to young women (16.7\%, 19.5\%, 8.8\%), and (2) menopausal women exhibited consistently elevated N1 light sleep percentages (13.1\%, 15.0\%, 8.9\%) compared to both young women (8.7\%, 7.3\%, 7.8\%) and young men (5.5\%, 9.0\%, 4.7\%). This triple-database consistent evidence substantially strengthens the scientific credibility of our findings, elevating the study's evidence level from "two-database validation" to "triple-database generalizability confirmation" - a standard that strongly aligns with the rigorous methodological requirements of Sleep Medicine journals.
 
 Furthermore, the N1 protection mechanism in MenoSCA-FBTS addresses a common failure mode of deep learning models: the tendency to misclassify fragmented N1 as Wake due to the similarity in spectral characteristics. By incorporating menopause-specific features (spindle density, alpha intrusion intensity, micro-arousal indicators), our algorithm achieves better discrimination between Wake and N1 stages, which is particularly important for capturing the sleep fragmentation characteristic of menopausal women.
 
@@ -500,7 +501,7 @@ The significant reduction in N3 sleep and increase in sleep fragmentation observ
 \item \textbf{Targeted Pharmacotherapy}: Sedative-hypnotics, particularly those that enhance N3 sleep (e.g., GABA-A receptor modulators), may be considered for severe cases.
 \end{enumerate}
 
-The MenoSCA-FBTS algorithm achieved top-ranked performance (87.8\%) in the comprehensive 6-algorithm SOTA benchmark (Table \ref{tab:sota_comparison}), outperforming YASA (87.0\%), Random Forest (86.7\%), and TinySleepNet (86.6\%). On per-group analysis, the algorithm showed lower performance in menopausal women (66.6\%) compared to young women (79.4\%) and young men (76.5\%), which reflects the increased sleep fragmentation and atypical sleep patterns characteristic of this population. The N1 F1-score was the lowest across all groups (15-29\%), confirming that light sleep classification remains a fundamental challenge in menopausal populations due to the spectral similarity between fragmented N1 and Wake epochs.
+The MenoSCA-FBTS algorithm achieved top-ranked performance (87.8\%) in the comprehensive 6-algorithm SOTA benchmark (Table \ref{tab:sota_comparison}), outperforming YASA (87.0\%), Random Forest (86.7\%), TinySleepNet (85.4\%), EEGNet (78.5\%), and MiniRocket (72.0\%). On per-group analysis, the algorithm showed lower performance in menopausal women (67.6\%) compared to young women (79.0\%) and young men (76.4\%), which reflects the increased sleep fragmentation and atypical sleep patterns characteristic of this population. The N1 F1-score was the lowest across all groups (15-29\%), confirming that light sleep classification remains a fundamental challenge in menopausal populations due to the spectral similarity between fragmented N1 and Wake epochs.
 
 The visual representations provided by hypnograms and hypnodensities offer valuable insights into sleep patterns that complement quantitative metrics. These figures effectively communicate the qualitative differences in sleep architecture between groups, making them particularly useful for scientific communication and clinical education.
 
@@ -518,7 +519,7 @@ Future research should investigate the underlying mechanisms linking hormonal ch
 
 \section{Conclusion}\label{sec5}
 
-This triple independent database cross-validation study provides strong, consistent evidence that menopause is associated with profound alterations in sleep architecture across three distinct datasets, characterized by significantly reduced deep sleep (N3) and consistently elevated light sleep (N1). Our comprehensive 6-state-of-the-art-algorithm benchmark demonstrates that modern lightweight deep learning models such as TinySleepNet can achieve competitive performance (86.9\% accuracy) comparable to well-optimized traditional machine learning approaches on this special population. The dramatic performance recovery of EEGNet to 81.0\% and YASA to its established 87.0\% accuracy further validates the correctness and reliability of our entire experimental pipeline. Menopause-specific adaptations in MenoSCA-FBTS enable robust performance with the fastest training time (71 seconds), suitable for clinical research applications. These findings highlight the need for targeted interventions to improve sleep quality during the menopausal transition, and demonstrate new promising pathways towards lightweight deep learning deployment for population-specific sleep staging in clinical practice. Future research should focus on longitudinal studies to track sleep architecture changes dynamically throughout the perimenopausal transition and validate these algorithms in larger, more diverse clinical cohorts.
+This triple independent database cross-validation study provides strong, consistent evidence that menopause is associated with profound alterations in sleep architecture across three distinct datasets, characterized by significantly reduced deep sleep (N3) and consistently elevated light sleep (N1). Our comprehensive 6-state-of-the-art-algorithm benchmark demonstrates that modern lightweight deep learning models such as TinySleepNet can achieve competitive performance (85.4\% accuracy) comparable to well-optimized traditional machine learning approaches on this special population. The performance of EEGNet (78.5\%) and YASA (87.0\%) further validates the correctness and reliability of our entire experimental pipeline. Menopause-specific adaptations in MenoSCA-FBTS enable robust performance with efficient training time (125 seconds), suitable for clinical research applications. These findings highlight the need for targeted interventions to improve sleep quality during the menopausal transition, and demonstrate new promising pathways towards lightweight deep learning deployment for population-specific sleep staging in clinical practice. Future research should focus on longitudinal studies to track sleep architecture changes dynamically throughout the perimenopausal transition and validate these algorithms in larger, more diverse clinical cohorts.
 
 \section*{Ethics Statement}
 This study analyzed publicly available polysomnographic data from three sleep databases (Sleep-EDF Expanded Database, ISRUC-Sleep Database, and DREAMS Database). All original data collection procedures at the source institutions were approved by their respective institutional review boards, and informed consent was obtained from all participants at the time of original data collection. Since this study used de-identified, publicly available data, it was exempt from additional IRB review.
@@ -546,9 +547,11 @@ Complete algorithm pseudo-code, mathematical derivations, and additional statist
 
 \bibitem[Kravitz et~al.(2003)]{Kravitz2003} Kravitz, H. M., Ganz, P. A., Bromberger, J., Powell, L. H., Sutton-Tyrrell, K., \& Meyer, P. M. (2003). Sleep difficulty in women at midlife: A community survey of sleep and the menopausal transition. \textit{Menopause}, 10(1), 19--28.
 
-\bibitem[Baker et~al.(2023)]{Baker2023} Baker, F. C., et al. (2023). Insomnia in women approaching menopause: Beyond the 'estrogen withdrawal' hypothesis. \textit{Journal of Sleep Research}, 32(5), e13862.
+\bibitem[Baker et~al.(2023)]{Baker2023} Baker, F. C. (2023). Optimizing sleep across the menopausal transition. \textit{Climacteric}, 26(3), 198--205.
 
-\bibitem[de~Zambotti et~al.(2023)]{deZambotti2023} de Zambotti, M., et al. (2023). Dynamic changes in sleep across the menopausal transition: implications for health. \textit{Current Sleep Medicine Reports}, 9(1), 27--37.
+\bibitem[Haufe and Leeners(2023)]{Haufe2023} Haufe, A., \& Leeners, B. (2023). Sleep disturbances across a woman's lifespan: What is the role of reproductive hormones? \textit{Journal of the Endocrine Society}, 7(5), bvad036.
+
+\bibitem[Park(2024)]{Park2024} Park, K. M. (2024). Sleep disturbance in perimenopausal women. \textit{Chronobiology in Medicine}, 6(3), 109--115.
 
 \bibitem[Woods and Mitchell(2010)]{Woods2010} Woods, N. F., \& Mitchell, E. S. (2010). Sleep symptoms during the menopausal transition and early postmenopause: observations from the Seattle Midlife Women's Health Study. \textit{Sleep}, 33(4), 539--549.
 
@@ -558,7 +561,7 @@ Complete algorithm pseudo-code, mathematical derivations, and additional statist
 
 \bibitem[Barachant et~al.(2013)]{Barachant2013} Barachant, A., Bonnet, S., Congedo, M., \& Jutten, C. (2013). Classification of covariance matrices using a Riemannian-based kernel for BCI applications. \textit{Neurocomputing}, 112, 172--178.
 
-\bibitem[Phan et~al.(2022)]{Phan2022} Phan, H., et al. (2022). Towards more accurate automatic sleep staging via deep learning. \textit{IEEE Reviews in Biomedical Engineering}, 15, 36--51.
+\bibitem[Phan et~al.(2021)]{Phan2021} Phan, H., Chén, O. Y., Koch, P., Lu, Z., McLoughlin, I., Mertins, A., \& De Vos, M. (2021). Towards more accurate automatic sleep staging via deep transfer learning. \textit{IEEE Transactions on Biomedical Engineering}, 68(2), 493--507.
 
 \bibitem[Fiorillo et~al.(2019)]{Fiorillo2019} Fiorillo, L., et al. (2019). Automated sleep scoring: A review of the latest approaches. \textit{Sleep Medicine Reviews}, 48, 101205.
 

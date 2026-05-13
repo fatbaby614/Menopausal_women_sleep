@@ -36,6 +36,8 @@ experiment_results/
 results_pytorch/
 experiment_results_0511/
 results_pytorch_0511/
+experiment_results_0512/
+results_pytorch_0512/
 
 # LaTeX临时编译产物
 *.aux
