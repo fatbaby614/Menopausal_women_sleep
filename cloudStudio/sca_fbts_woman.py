@@ -69,6 +69,8 @@ class MenoSCA_FBTS(BaseEstimator, ClassifierMixin):
             return [tuple(b) if isinstance(b, list) else b for b in self.freq_bands]
         if self.n_bands == 5:
             return [(0.5, 4), (4, 8), (8, 12), (12, 30), (30, 40)]
+        elif self.n_bands == 7:
+            return [(0.5, 4), (4, 6), (6, 8), (8, 12), (12, 15), (15, 30), (30, 40)]
         elif self.n_bands == 10:
             return [(0.5, 2), (2, 4), (4, 6), (6, 8), (8, 10), (10, 12), (12, 15), (15, 20), (20, 30), (30, 40)]
         else:
@@ -77,27 +79,27 @@ class MenoSCA_FBTS(BaseEstimator, ClassifierMixin):
     def extract_spectral_features(self, eeg_data):
         fs = self.fs if hasattr(self, 'fs') and self.fs else 100
         freqs, psd = signal.welch(eeg_data, fs=fs, nperseg=256, noverlap=128)
-        
+
         bands = self._get_freq_bands()
         features = []
         total_power = np.sum(psd) + 1e-12
-        
+
         for (low, high) in bands:
             mask = (freqs >= low) & (freqs < high)
-            power = np.sum(psd[mask])
+            power = np.sum(psd[:, mask]) if psd.ndim > 1 else np.sum(psd[mask])
             features.append(power)
             features.append(power / total_power * 100)
-        
+
         if self.enable_menopause_features:
             band_powers = []
             for (low, high) in bands:
                 mask = (freqs >= low) & (freqs < high)
-                band_powers.append(np.sum(psd[mask]))
+                band_powers.append(np.sum(psd[:, mask]) if psd.ndim > 1 else np.sum(psd[mask]))
             if len(band_powers) >= 4:
                 features.append(band_powers[2] / (band_powers[1] + 1e-8))
                 features.append(band_powers[3] / (band_powers[2] + 1e-8))
                 features.append(np.std(eeg_data))
-        
+
         return np.array(features, dtype=np.float64)
     
     def extract_cov_features_safe(self, eeg_data):
@@ -201,7 +203,7 @@ class MenoSCA_FBTS(BaseEstimator, ClassifierMixin):
         X_scaled = self.scaler.transform(X_features)
         y_pred = self.clf.predict(X_scaled)
         
-        if self.n1_protection and self.enable_menopause_features:
+        if self.n1_protection:
             protected = y_pred.copy()
             for i in range(1, len(y_pred) - 1):
                 prev = protected[i-1]

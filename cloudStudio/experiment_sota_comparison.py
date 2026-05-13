@@ -758,7 +758,7 @@ def run_experiment(selected_algorithms=None):
             X_train, X_test = X[train_idx], X[test_idx]
             y_train, y_test = y[train_idx], y[test_idx]
 
-            clf = MenoSCA_FBTS(n_bands=10, estimator='oas', metric='riemann',
+            clf = MenoSCA_FBTS(n_bands=7, estimator='oas', metric='riemann',
                               classifier='ensemble', n_features=200, fs=FS,
                               temporal_smoothing=True, enable_menopause_features=True)
             clf.fit(X_train, y_train)

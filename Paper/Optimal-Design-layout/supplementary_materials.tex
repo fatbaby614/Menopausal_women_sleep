@@ -1,0 +1,205 @@
+\documentclass[ASNA,twocolumn]{USG}
+\usepackage{anyfontsize}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{steinmetz}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\graphicspath{{./Figure/}{./images/}}
+
+\begin{document}
+
+\title{Supplementary Materials: Sleep Architecture Changes in Menopausal Women: A Comparative Study Using the MenoSCA-FBTS Algorithm}
+
+\maketitle
+
+\section*{Supplementary Method S1: Complete Algorithm Pseudo-code}
+
+The complete MenoSCA-FBTS algorithm pseudo-code is provided below for reproducibility.
+
+\begin{algorithm}[!ht]
+\caption{MenoSCA-FBTS Algorithm with Menopause-Specific Adaptations}
+\begin{algorithmic}[1]
+\Require Input EEG signal $\mathbf{X} \in \mathbb{R}^{C \times T}$, menopause-optimized filter bank $\{(f_k^{low}, f_k^{high})\}_{k=1}^{7}$, training set $\mathcal{D}_{\text{train}}$
+\Ensure Sleep stage classification $\hat{y}$
+
+\State \textbf{[MENOPAUSE-SPECIFIC] 7-Band Filter Decomposition}
+\Comment{Standard FBTS uses 5 bands; we use 7 with subdivided theta and explicit sigma}
+\For{$k = 1$ to $7$}
+    \State $\mathbf{X}_k = \text{BandpassFilter}(\mathbf{X}, f_k^{low}, f_k^{high})$
+    \Comment{Bands: Delta, Low\_Theta, High\_Theta, Alpha, Sigma, Beta, Gamma}
+\EndFor
+
+\State \textbf{Covariance Matrix Estimation}
+\For{$k = 1$ to $7$}
+    \State $\mathbf{C}_k = \frac{1}{T-1} \mathbf{X}_k \mathbf{X}_k^T$
+\EndFor
+
+\State \textbf{Riemannian Mean Calculation (Training Phase)}
+\State $\mathbf{C}_{\text{ref}} = \arg\min_{\mathbf{C}} \sum_{i=1}^{N} d_R^2(\mathbf{C}, \mathbf{C}_i)$
+\State where $d_R(\mathbf{C}_1, \mathbf{C}_2) = \|\log(\mathbf{C}_1^{-1/2} \mathbf{C}_2 \mathbf{C}_1^{-1/2})\|_F$
+
+\State \textbf{Tangent Space Projection}
+\For{$k = 1$ to $7$}
+    \State $\mathbf{C}_{k,\text{centered}} = \mathbf{C}_{\text{ref}}^{-1/2} \mathbf{C}_k \mathbf{C}_{\text{ref}}^{-1/2}$
+    \State $\mathbf{L}_k = \log(\mathbf{C}_{k,\text{centered}})$
+    \State $\mathbf{v}_k = \text{upper}(\mathbf{L}_k)$
+\EndFor
+
+\State \textbf{[MENOPAUSE-SPECIFIC] Feature Enhancement}
+\Comment{Four domain-specific features for menopausal EEG}
+\State $\mathbf{f}_{\text{spindle}} = \text{SpindleDensity}(\mathbf{X}_{\text{Sigma}}, 12\text{-}15\text{ Hz})$
+\State $\mathbf{f}_{\text{alpha}} = \text{AlphaIntrusion}(\mathbf{X}_{\text{Alpha}}, \text{non-REM epochs})$
+\State $\mathbf{f}_{\text{micro}} = \text{MicroArousalIndicator}(\text{Var}(\mathbf{X}))$
+\State $\mathbf{f}_{\text{ratio}} = [P_{\theta}/P_{\alpha}, P_{\delta}/P_{\beta}]$
+\State $\mathbf{f}_{\text{menopause}} = [\mathbf{f}_{\text{spindle}}, \mathbf{f}_{\text{alpha}}, \mathbf{f}_{\text{micro}}, \mathbf{f}_{\text{ratio}}]$
+
+\State \textbf{Feature Concatenation}
+\State $\mathbf{v} = [\mathbf{v}_1; \mathbf{v}_2; \dots; \mathbf{v}_7; \mathbf{f}_{\text{menopause}}]$
+
+\State \textbf{SVM Classification}
+\State $\mathbf{P} = \text{SVM.predict\_proba}(\mathbf{v})$
+
+\State \textbf{[MENOPAUSE-SPECIFIC] Adaptive Temporal Smoothing with N1 Protection}
+\Comment{Preserves fragmented N1 patterns; prevents over-smoothing}
+\For{each epoch $t$}
+    \If{$\text{IsHighVarianceTransition}(\mathbf{P}, t)$}
+        \State $\mathbf{P}_{\text{smoothed}}[t] = \mathbf{P}[t]$ \Comment{No smoothing for N1 transitions}
+    \Else
+        \State $\mathbf{P}_{\text{smoothed}}[t] = \frac{1}{w} \sum_{i=t-w/2}^{t+w/2} \mathbf{P}[i]$
+    \EndIf
+\EndFor
+
+\State $\hat{y} = \arg\max(\mathbf{P}_{\text{smoothed}})$
+
+\State \Return $\hat{y}$
+\end{algorithmic}
+\label{alg:menoscafbts_supp}
+\end{algorithm}
+
+\section*{Supplementary Method S2: Complete Mathematical Derivations}
+
+\subsection*{S2.1 Covariance Matrix Estimation}
+For each frequency band $k$, the covariance matrix is computed from the filtered EEG signal $\mathbf{X}_k \in \mathbb{R}^{C \times T}$, where $C$ is the number of channels and $T$ is the number of samples:
+
+\[
+\mathbf{C}_k = \frac{1}{T-1} \mathbf{X}_k \mathbf{X}_k^T
+\]
+
+This captures the spatial correlation structure within each frequency band.
+
+\subsection*{S2.2 Riemannian Manifold Geometry}
+Covariance matrices form a Riemannian manifold $\mathcal{M} = \mathbb{S}_+^C$, where $\mathbb{S}_+^C$ denotes the set of symmetric positive definite matrices of size $C \times C$. The Riemannian distance between two matrices $\mathbf{C}_1$ and $\mathbf{C}_2$ is defined as:
+
+\[
+d_R(\mathbf{C}_1, \mathbf{C}_2) = \left\| \log\left( \mathbf{C}_1^{-1/2} \mathbf{C}_2 \mathbf{C}_1^{-1/2} \right) \right\|_F
+\]
+
+where $\log(\cdot)$ denotes the matrix logarithm and $\|\cdot\|_F$ is the Frobenius norm.
+
+\subsection*{S2.3 Tangent Space Projection}
+The tangent space at a reference point $\mathbf{C}_{\text{ref}}$ is projected using the Log-Euclidean mapping:
+
+\[
+\mathbf{L}_k = \log\left( \mathbf{C}_{\text{ref}}^{-1/2} \mathbf{C}_k \mathbf{C}_{\text{ref}}^{-1/2} \right)
+\]
+
+The reference point $\mathbf{C}_{\text{ref}}$ is the Riemannian mean of the training set, minimizing the sum of squared Riemannian distances:
+
+\[
+\mathbf{C}_{\text{ref}} = \arg\min_{\mathbf{C}} \sum_{i=1}^{N} d_R^2(\mathbf{C}, \mathbf{C}_i)
+\]
+
+\subsection*{S2.4 Feature Vector Construction}
+From each logarithmic matrix $\mathbf{L}_k$, we extract the upper triangular part to form a feature vector:
+
+\[
+\mathbf{v}_k = \text{vec}(\text{triu}(\mathbf{L}_k))
+\]
+
+where $\text{triu}(\cdot)$ extracts the upper triangular part and $\text{vec}(\cdot)$ vectorizes the result. The final feature vector is formed by concatenating features from all frequency bands:
+
+\[
+\mathbf{v} = \left[ \mathbf{v}_1^T \quad \mathbf{v}_2^T \quad \dots \quad \mathbf{v}_K^T \right]^T
+\]
+
+\subsection*{S2.5 Temporal Smoothing}
+To enforce temporal consistency, a Bayesian smoothing approach is applied to the predicted probabilities:
+
+\[
+\mathbf{P}_{\text{smoothed}}[t] = \frac{1}{w} \sum_{i=t-w/2}^{t+w/2} \mathbf{P}[i]
+\]
+
+where $w$ is the smoothing window size (typically 3 epochs).
+
+\subsection*{S2.6 Menopause-Specific Feature Enhancement}
+For menopausal populations, we incorporate additional spectral features:
+
+\[
+\mathbf{f}_{\text{menopause}} = \left[ \frac{P_{\theta}}{P_{\alpha}}, \frac{P_{\delta}}{P_{\beta}}, \text{HFD}(\theta), \text{HFD}(\alpha) \right]
+\]
+
+where $P_{\theta}, P_{\alpha}, P_{\delta}, P_{\beta}$ are spectral powers in respective bands, and $\text{HFD}(\cdot)$ denotes the Higuchi Fractal Dimension.
+
+\section*{Supplementary Results S1: Additional Statistical Details}
+
+\subsection*{S1.1 Complete Statistical Test Results}
+
+Table \ref{tab:supp_stats} provides the complete statistical test results including Kruskal-Wallis H statistics, degrees of freedom, p-values, and Cohen's d effect sizes with 95\% confidence intervals for all pairwise comparisons.
+
+\begin{table*}[!ht]
+\centering
+\caption{Complete Statistical Test Results for Sleep Architecture Comparison}
+\begin{tabular*}{\textwidth}{@{\extracolsep\fill}lcccccc@{\extracolsep\fill}}
+\toprule
+\textbf{Parameter} & \textbf{H} & \textbf{df} & \textbf{p-value} & \textbf{Comparison} & \textbf{U} & \textbf{Cohen's d [95\% CI]} \\
+\midrule
+TST (min) & 0.33 & 2 & 0.847 & MW vs YW & 44 & 0.33 [-0.62, 1.28] \\
+ & & & & MW vs YM & 42 & -0.31 [-1.26, 0.64] \\
+ & & & & YW vs YM & 42 & -0.52 [-1.47, 0.43] \\
+\midrule
+Sleep Efficiency (\%) & 5.97 & 2 & 0.051 & MW vs YW & 18 & -1.20 [-2.25, -0.15] \\
+ & & & & MW vs YM & 14 & -1.43 [-2.48, -0.38] \\
+ & & & & YW vs YM & 52 & -0.31 [-1.26, 0.64] \\
+\midrule
+WASO (min) & 6.23 & 2 & 0.044* & MW vs YW & 64 & 1.24 [0.15, 2.33] \\
+ & & & & MW vs YM & 65 & 1.31 [0.22, 2.40] \\
+ & & & & YW vs YM & 47 & 0.15 [-0.80, 1.10] \\
+\midrule
+SOL (min) & 0.80 & 2 & 0.671 & MW vs YW & 37 & -0.64 [-1.59, 0.31] \\
+ & & & & MW vs YM & 33 & -0.77 [-1.72, 0.18] \\
+ & & & & YW vs YM & 38 & -0.15 [-1.10, 0.80] \\
+\midrule
+Transition Rate (/hr) & 1.80 & 2 & 0.407 & MW vs YW & 43 & 0.21 [-0.74, 1.16] \\
+ & & & & MW vs YM & 53 & 0.64 [-0.31, 1.59] \\
+ & & & & YW vs YM & 64 & 0.60 [-0.35, 1.55] \\
+\midrule
+N1 (\% TST) & 12.98 & 2 & 0.0015** & MW vs YW & 59 & 1.09* [0.12, 2.06] \\
+ & & & & MW vs YM & 73 & 2.04** [0.89, 3.19] \\
+ & & & & YW vs YM & 88 & 1.45* [0.40, 2.50] \\
+\midrule
+N2 (\% TST) & 1.68 & 2 & 0.432 & MW vs YW & 54 & 0.51 [-0.44, 1.46] \\
+ & & & & MW vs YM & 51 & 0.37 [-0.58, 1.32] \\
+ & & & & YW vs YM & 47 & -0.15 [-1.10, 0.80] \\
+\midrule
+N3 (\% TST) & 7.30 & 2 & 0.026* & MW vs YW & 13 & -1.26* [-2.31, -0.21] \\
+ & & & & MW vs YM & 14 & -1.29 [-2.35, -0.23] \\
+ & & & & YW vs YM & 53 & 0.19 [-0.76, 1.14] \\
+\midrule
+REM (\% TST) & 4.97 & 2 & 0.083 & MW vs YW & 53 & 0.49 [-0.46, 1.44] \\
+ & & & & MW vs YM & 27 & -0.63 [-1.58, 0.32] \\
+ & & & & YW vs YM & 22 & -1.03 [-1.98, -0.08] \\
+\bottomrule
+\end{tabular*}
+\begin{tablenotes}
+\item *p < 0.05, **p < 0.01. MW = Menopausal Women, YW = Young Women, YM = Young Men. Statistical tests: Kruskal-Wallis H test with Mann-Whitney U post-hoc (Bonferroni corrected, $\alpha$=0.017). Effect sizes: Cohen's d with 95\% confidence intervals.
+\end{tablenotes}
+\label{tab:supp_stats}
+\end{table*}
+
+\end{document}

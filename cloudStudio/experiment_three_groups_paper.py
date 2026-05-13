@@ -224,11 +224,11 @@ def load_edf_data(subject_id, night=1):
     psg_pattern = f"SC4{str(subject_id).zfill(2)}{night}*-PSG.edf"
     psg_files = glob.glob(os.path.join(SLEEP_EDF_DIR, 'sleep-cassette', psg_pattern))
     if not psg_files:
-        return None, None
+        return None, None, None
     hyp_pattern = f"SC4{str(subject_id).zfill(2)}{night}*-Hypnogram.edf"
     hyp_files = glob.glob(os.path.join(SLEEP_EDF_DIR, 'sleep-cassette', hyp_pattern))
     if not hyp_files:
-        return None, None
+        return None, None, None
     try:
         raw = mne.io.read_raw_edf(psg_files[0], preload=True, verbose=False)
         if raw.info['sfreq'] != FS:
@@ -241,7 +241,7 @@ def load_edf_data(subject_id, night=1):
         if len(target_channels) < 2:
             target_channels = eeg_channels[:2]
         if len(target_channels) < 2:
-            return None, None
+            return None, None, None
         raw.pick_channels(target_channels)
         data = raw.get_data()
 
@@ -255,7 +255,7 @@ def load_edf_data(subject_id, night=1):
                 stage_sequence.append((onset, duration, desc))
         
         if not stage_sequence:
-            return None, None
+            return None, None, None
         
         # 2. Merge adjacent identical stages
         merged_stages = []
@@ -313,17 +313,24 @@ def load_edf_data(subject_id, night=1):
                     max_sleep_duration = block_duration
                     max_sleep_block = (current_start, current_end)
         
-        # If valid sleep block found
+        # Find first sleep onset for SOL calculation (from original recording start)
+        # SOL = time from recording start to first sleep epoch
+        first_sleep_onset_for_sol = 0.0  # Default value
+
         if max_sleep_block:
             sleep_window_start = max(0.0, max_sleep_block[0] - 300)  # 5-min buffer before
             sleep_window_end = min(data.shape[1] / FS, max_sleep_block[1] + 300)  # 5-min buffer after
+            first_sleep_onset_for_sol = max_sleep_block[0]
         else:
-            # Fallback: use time range of all non-Wake stages
             sleep_stages = [(o, d, desc) for o, d, desc in stage_sequence if desc != 'Sleep stage W']
             if sleep_stages:
                 sleep_window_start = max(0.0, sleep_stages[0][0] - 300)
                 last_sleep = sleep_stages[-1]
                 sleep_window_end = min(data.shape[1] / FS, last_sleep[0] + last_sleep[1] + 300)
+                first_sleep_onset_for_sol = sleep_stages[0][0]
+            else:
+                sleep_window_start = 0.0
+                sleep_window_end = data.shape[1] / FS
         
         # Convert time to sample points
         start_sample = int(sleep_window_start * FS)
@@ -369,11 +376,13 @@ def load_edf_data(subject_id, night=1):
             epochs_labels.append(label)
 
         if len(epochs_data) == 0:
-            return None, None
-        return np.array(epochs_data), np.array(epochs_labels)
+            return None, None, None
+        # Return SOL calculated from original recording start (not sleep window start)
+        sol_from_recording_start = first_sleep_onset_for_sol / 60.0 if first_sleep_onset_for_sol > 0 else 0.0
+        return np.array(epochs_data), np.array(epochs_labels), sol_from_recording_start
     except Exception as e:
         print(f"    Load failed: {e}")
-        return None, None
+        return None, None, None
 
 
 def load_isruc_data(subject_id, night=1):
@@ -382,11 +391,11 @@ def load_isruc_data(subject_id, night=1):
     subj_dir = os.path.join(ISRUC_DIR, 'subgroup1', str(subject_id))
     rec_path = os.path.join(subj_dir, f'{subject_id}.rec')
     if not os.path.exists(rec_path):
-        return None, None
+        return None, None, None
 
     txt_path = os.path.join(subj_dir, f'{subject_id}_{night}.txt')
     if not os.path.exists(txt_path):
-        return None, None
+        return None, None, None
 
     try:
         # Read PSG signals
@@ -447,11 +456,11 @@ def load_isruc_data(subject_id, night=1):
             epochs_labels.append(labels[i])
 
         if len(epochs_data) == 0:
-            return None, None
-        return np.array(epochs_data), np.array(epochs_labels)
+            return None, None, None
+        return np.array(epochs_data), np.array(epochs_labels), None
     except Exception as e:
         print(f"    Load failed: {e}")
-        return None, None
+        return None, None, None
 
 
 def load_dreams_data(subject_id, night=1):
@@ -478,7 +487,7 @@ def load_dreams_data(subject_id, night=1):
             if psg_files:
                 break
     if not psg_files:
-        return None, None
+        return None, None, None
 
     # Find Hypnogram file (HypnogramAASM_patientX.txt)
     hyp_pattern = f"HypnogramAASM_patient{subject_num}.txt"
@@ -496,7 +505,7 @@ def load_dreams_data(subject_id, night=1):
             if hyp_files:
                 break
     if not hyp_files:
-        return None, None
+        return None, None, None
 
     try:
         # Load EEG data
@@ -522,7 +531,7 @@ def load_dreams_data(subject_id, night=1):
             target_channels = eeg_channels[:2]
         if len(target_channels) < 2:
             print(f"      ❌ Not enough EEG channels: {raw.ch_names}")
-            return None, None
+            return None, None, None
 
         raw.pick_channels(target_channels)
         data = raw.get_data()
@@ -634,7 +643,7 @@ def load_dreams_data(subject_id, night=1):
                     pass
 
         if not found_labels:
-            return None, None
+            return None, None, None
 
         # Segment EEG data into epochs
         n_epochs = min(data.shape[1] // SAMPLES_PER_EPOCH, len(epochs_labels))
@@ -649,22 +658,22 @@ def load_dreams_data(subject_id, night=1):
 
         epochs_labels = epochs_labels[:n_epochs]
         if len(epochs_data) == 0:
-            return None, None
+            return None, None, None
 
-        return np.array(epochs_data), np.array(epochs_labels)
+        return np.array(epochs_data), np.array(epochs_labels), None
 
     except Exception as e:
         print(f"    Load failed: {e}")
         import traceback
         traceback.print_exc()
-        return None, None
+        return None, None, None
 
 
 # =====================================================================
 # Part 2: Clinical Sleep Metric Computation
 # =====================================================================
 
-def compute_sleep_clinical_metrics(epochs_labels, epoch_length_s=EPOCH_LENGTH_S):
+def compute_sleep_clinical_metrics(epochs_labels, epoch_length_s=EPOCH_LENGTH_S, sol_min_override=None):
     """Compute clinical sleep architecture metrics(using sleep window: first sleep → last awakening)
 
     Changes from v1:
@@ -672,6 +681,12 @@ def compute_sleep_clinical_metrics(epochs_labels, epoch_length_s=EPOCH_LENGTH_S)
     - SE = TST / TIB (not full recording)
     - WASO = Wake epochs within sleep window
     - SOL = from recording start to first sleep epoch (standard clinical definition)
+
+    Args:
+        epochs_labels: array of sleep stage labels (0=Wake, 1=N1, 2=N2, 3=N3, 4=REM)
+        epoch_length_s: epoch length in seconds (default 30)
+        sol_min_override: if provided, use this SOL value instead of calculating from labels
+                         (useful when data has been windowed and first epoch is not recording start)
 
     Returns:
         dict: {
@@ -704,8 +719,11 @@ def compute_sleep_clinical_metrics(epochs_labels, epoch_length_s=EPOCH_LENGTH_S)
 
     # ============ SOL: Standard Clinical Definition =============
     # SOL = time from recording start to first sleep epoch (non-Wake)
-    first_sleep_for_sol = sleep_indices[0]
-    sol_min = first_sleep_for_sol * epoch_length_s / 60
+    if sol_min_override is not None:
+        sol_min = sol_min_override
+    else:
+        first_sleep_for_sol = sleep_indices[0]
+        sol_min = first_sleep_for_sol * epoch_length_s / 60
     # =========================================
 
     # Find main sleep period onset (exclude daytime drowsiness/naps, for TIB/TST/WASO calculation)
@@ -1132,15 +1150,15 @@ def load_group_data(group_name, config, subject_info):
     for subj_id in config['subject_ids']:
         print(f"  Subject {subj_id}...", end=" ")
         if DATASET == 'isruc':
-            epochs, labels = load_isruc_data(subj_id, night=1)
+            epochs, labels, sol_override = load_isruc_data(subj_id, night=1)
         elif DATASET == 'dreams':
-            epochs, labels = load_dreams_data(subj_id, night=1)
+            epochs, labels, sol_override = load_dreams_data(subj_id, night=1)
         else:
-            epochs, labels = load_edf_data(subj_id, night=1)
+            epochs, labels, sol_override = load_edf_data(subj_id, night=1)
 
         if epochs is not None:
             info = subject_info.get(subj_id, {})
-            n1_clinical = compute_sleep_clinical_metrics(labels)
+            n1_clinical = compute_sleep_clinical_metrics(labels, sol_min_override=sol_override)
             stage_counts = {s: int(np.sum(labels == i)) for i, s in STAGE_NAMES.items()}
             stage_pcts = {s: round(100 * c / len(labels), 1) for s, c in stage_counts.items()}
             trans_matrix = compute_transition_matrix(labels)
@@ -1163,14 +1181,13 @@ def load_group_data(group_name, config, subject_info):
 
             n2_data = None
             if DATASET == 'isruc':
-                epochs2, labels2 = load_isruc_data(subj_id, night=2)
+                epochs2, labels2, sol_override2 = load_isruc_data(subj_id, night=2)
             elif DATASET == 'dreams':
-                # DREAMS typically has only one night of data
-                epochs2, labels2 = None, None
+                epochs2, labels2, sol_override2 = None, None, None
             else:
-                epochs2, labels2 = load_edf_data(subj_id, night=2)
+                epochs2, labels2, sol_override2 = load_edf_data(subj_id, night=2)
             if epochs2 is not None:
-                n2_clinical = compute_sleep_clinical_metrics(labels2)
+                n2_clinical = compute_sleep_clinical_metrics(labels2, sol_min_override=sol_override2)
                 stage_counts2 = {s: int(np.sum(labels2 == i)) for i, s in STAGE_NAMES.items()}
                 trans_matrix2 = compute_transition_matrix(labels2)
                 subj_entry['night2'] = {

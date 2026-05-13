@@ -134,7 +134,7 @@ def run_ablation_experiment(name, config):
         y_train, y_test = y[train_idx], y[test_idx]
         
         clf = MenoSCA_FBTS(
-            n_bands=config.get('n_bands', 10),
+            n_bands=config.get('n_bands', 7),  # Default to 7 bands (not 10!)
             estimator=config.get('estimator', 'oas'),
             metric=config.get('metric', 'riemann'),
             classifier=config.get('classifier', 'ensemble'),

@@ -1,0 +1,39 @@
+%% Test file for title page
+\documentclass[a4paper,fleqn]{cas-dc}
+
+\usepackage[numbers]{natbib}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+\shorttitle{Test Title}
+\shortauthors{Test Author}
+
+\title[mode=title]{Test Paper Title}
+
+\author[1]{Test Author}[orcid=0000-0000-0000-0000]
+\ead{test@example.com}
+\credit{Conceptualization}
+
+\affiliation[1]{organization={Test University},
+                addressline={Department of Test}, 
+                city={Test City},
+                postcode={123456}, 
+                country={China}}
+
+\begin{abstract}
+This is a test abstract.
+\end{abstract}
+
+\begin{keywords}
+Test \sep Keywords
+\end{keywords}
+
+\maketitle
+
+\section{Introduction}
+Test content.
+
+\end{document}

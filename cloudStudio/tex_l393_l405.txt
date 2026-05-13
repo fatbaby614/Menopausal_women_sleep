@@ -1,0 +1,13 @@
+393: This comprehensive 6-method benchmark reveals several critical new findings: (1) TinySleepNet, the lightweight deep learning architecture, achieved remarkable performance of 86.9\% accuracy (ranking 2nd overall), demonstrating that modern end-to-end deep learning models can now match and even slightly outperform traditional machine learning approaches on menopausal women's sleep staging; (2) EEGNet performance showed dramatic improvement (from 51.5\% in preliminary results to 81.0\% after proper data preprocessing), confirming that classic deep learning models can achieve respectable performance on this population when data pipelines are properly configured; (3) YASA recovered to its established performance level of 87.0\% accuracy, which is highly consistent with publicly reported results in the literature, validating the correctness of our entire experimental pipeline; and (4) MenoSCA-FBTS demonstrated robust 85.6\% accuracy with the fastest training time (71 seconds), highlighting its computational efficiency for clinical research applications.
+394: 
+395: \subsection{Ablation Study}
+396: 
+397: To evaluate the contribution of each algorithmic component, we conducted a systematic ablation study on the Sleep-EDF dataset. The results are summarized in Table \ref{tab:ablation}.
+398: 
+399: \begin{table}[!ht]
+400: \centering
+401: \caption{Ablation Study Results on Sleep-EDF Dataset}
+402: \label{tab:ablation}
+403: \begin{threeparttable}
+404: \begin{tabular}{lcc}
+405: \toprule

@@ -1,0 +1,6 @@
+425: The ablation study reveals several key insights. First, the menopause-specific features contribute +2.2\% to overall accuracy, confirming their value for this population. Second, Riemannian geometry outperforms Euclidean projection (+0.6\% accuracy, +5.1\% F1), validating the geometric approach for covariance matrix analysis. Third, the ensemble classifier outperforms LDA (+3.2\% accuracy) while achieving comparable performance to SVM. Fourth, reducing to 5 frequency bands or expanding to 10 bands results in slightly higher performance compared to the 7-band configuration, with 10-band achieving the best accuracy (89.2\%), suggesting that additional frequency resolution may further improve performance.
+426: 
+427: \subsection{Hypnodensity Analysis}
+428: 
+429: Hypnodensity plots (Figure \ref{fig:hypnodensity}(a)-(c)) provide a probabilistic representation of sleep stages over time, offering several advantages over traditional hypnograms. Unlike discrete hypnograms that assign a single sleep stage to each epoch, hypnodensity captures the uncertainty in sleep stage classification, which is particularly valuable for understanding sleep architecture in menopausal women who exhibit frequent micro-arousals and prolonged stage transitions.
+430: 

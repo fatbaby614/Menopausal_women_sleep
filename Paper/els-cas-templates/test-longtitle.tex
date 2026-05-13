@@ -1,0 +1,30 @@
+\documentclass[a4paper,fleqn,longmktitle]{cas-dc}
+\usepackage[numbers]{natbib}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+\shorttitle{Test Title}
+\shortauthors{Test Author}
+
+\title[mode=title]{Test Article Title with Long Title Option}
+
+\author[1]{Test Author}[orcid=0000-0000-0000-0000]
+\affiliation[1]{organization={Test Organization}, city={Test City}, country={Country}}
+
+\begin{abstract}
+This is a test abstract.
+\end{abstract}
+
+\begin{keywords}
+Test \sep Keywords
+\end{keywords}
+
+\maketitle
+
+\section{Introduction}
+Test content.
+
+\end{document}
