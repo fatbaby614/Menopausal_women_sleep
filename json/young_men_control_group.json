@@ -1,0 +1,112 @@
+{
+    "description": "年轻男性对照组受试者信息（用于更年期睡眠研究对比）",
+    "control_group_age_range": [25, 38],
+    "created_date": "2026-05-01",
+    "updated_date": "2026-05-01",
+    "update_note": "修复 Sleep-EDF 年龄段与 CSV 一致 (2026-05-02)",
+    "datasets": {
+        "Sleep-EDF": {
+            "description": "Sleep-EDF Expanded Database (SC subset)",
+            "total_control_subjects": 10,
+            "control_subjects": [
+                {"subject_id": "10", "age": 26, "gender": "M", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "11", "age": 26, "gender": "M", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "12", "age": 26, "gender": "M", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "13", "age": 27, "gender": "M", "subset": "SC", "nights": [1]},
+                {"subject_id": "14", "age": 27, "gender": "M", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "15", "age": 31, "gender": "M", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "16", "age": 32, "gender": "M", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "17", "age": 31, "gender": "M", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "18", "age": 28, "gender": "M", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "19", "age": 28, "gender": "M", "subset": "SC", "nights": [1, 2]}
+            ],
+            "summary": {
+                "total_subjects": 10,
+                "age_range": [26, 32],
+                "mean_age": 28.2,
+                "median_age": 27.5,
+                "min_age": 26,
+                "max_age": 32,
+                "total_nights": 19
+            }
+        },
+        "ISRUC-Sleep": {
+            "description": "ISRUC-Sleep Database Subgroup-I",
+            "total_control_subjects": 8,
+            "control_subjects": [
+                {"subject_id": 4, "age": 27, "gender": "M", "diagnosis": "SRVAS", "other_problems": "Epilepsy", "nights": [1, 2]},
+                {"subject_id": 6, "age": 22, "gender": "M", "diagnosis": "PLMS", "other_problems": "Epilepsy; brain tumour", "nights": [1, 2]},
+                {"subject_id": 18, "age": 38, "gender": "M", "diagnosis": "SAOS", "other_problems": "", "nights": [1, 2]},
+                {"subject_id": 31, "age": 29, "gender": "M", "diagnosis": "EPILEPSIA", "other_problems": "Paroxystic activity", "nights": [1, 2]},
+                {"subject_id": 38, "age": 37, "gender": "M", "diagnosis": "SAOS", "other_problems": "Alcool", "nights": [1, 2]},
+                {"subject_id": 46, "age": 28, "gender": "M", "diagnosis": "RONCOPATIA", "other_problems": "S. Down", "nights": [1, 2]},
+                {"subject_id": 50, "age": 31, "gender": "M", "diagnosis": "RONCOPATIA", "other_problems": "", "nights": [1, 2]},
+                {"subject_id": 57, "age": 29, "gender": "M", "diagnosis": "PRIVA??O DE SONO", "other_problems": "LES", "nights": [1, 2]}
+            ],
+            "summary": {
+                "total_subjects": 8,
+                "age_range": [22, 38],
+                "mean_age": 29.0,
+                "median_age": 29,
+                "min_age": 22,
+                "max_age": 38,
+                "total_nights": 16
+            }
+        },
+        "DREAMS": {
+            "description": "DREAMS Subjects Database - Healthy Subjects",
+            "total_control_subjects": 4,
+            "control_subjects": [
+                {"subject_id": "subject17", "age": 23, "gender": "M", "recording_duration": "08:18:30", "nights": [1]},
+                {"subject_id": "subject18", "age": 27, "gender": "M", "recording_duration": "08:30:40", "nights": [1]},
+                {"subject_id": "subject19", "age": 27, "gender": "M", "recording_duration": "08:36:50", "nights": [1]},
+                {"subject_id": "subject20", "age": 20, "gender": "M", "recording_duration": "09:32:30", "nights": [1]}
+            ],
+            "summary": {
+                "total_subjects": 4,
+                "age_range": [20, 27],
+                "mean_age": 24.3,
+                "median_age": 25,
+                "min_age": 20,
+                "max_age": 27,
+                "total_nights": 4
+            }
+        }
+    },
+    "purpose": "用于排除性别因素对睡眠结构差异的干扰，作为更年期女性研究的男性对照组",
+    "three_group_comparison": {
+        "group_A_menopausal_women": {
+            "description": "更年期女性组",
+            "total_subjects": {
+                "Sleep-EDF": 8,
+                "ISRUC-Sleep": 8,
+                "DREAMS": 6,
+                "combined": 22
+            },
+            "age_range": [45, 59],
+            "gender": "F"
+        },
+        "group_B_young_women": {
+            "description": "年轻女性对照组",
+            "total_subjects": {
+                "Sleep-EDF": 10,
+                "ISRUC-Sleep": 7,
+                "DREAMS": 9,
+                "combined": 26
+            },
+            "age_range": [20, 36],
+            "gender": "F"
+        },
+        "group_C_young_men": {
+            "description": "年轻男性对照组",
+            "total_subjects": {
+                "Sleep-EDF": 10,
+                "ISRUC-Sleep": 8,
+                "DREAMS": 4,
+                "combined": 22
+            },
+            "age_range": [20, 38],
+            "gender": "M"
+        }
+    }
+}

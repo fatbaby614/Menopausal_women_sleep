@@ -1,0 +1,115 @@
+{
+    "description": "年轻女性对照组受试者信息（用于更年期睡眠研究对比）",
+    "control_group_age_range": [25, 34],
+    "created_date": "2026-05-01",
+    "updated_date": "2026-05-01",
+    "update_note": "添加ISRUC-Sleep和DREAMS数据集年轻女性受试者",
+    "datasets": {
+        "Sleep-EDF": {
+            "description": "Sleep-EDF Expanded Database (SC subset)",
+            "total_control_subjects": 10,
+            "control_subjects": [
+                {"subject_id": "0", "age": 33, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "1", "age": 33, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "2", "age": 26, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "3", "age": 26, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "4", "age": 34, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "5", "age": 28, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "6", "age": 31, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "7", "age": 30, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "8", "age": 25, "gender": "F", "subset": "SC", "nights": [1, 2]},
+                {"subject_id": "9", "age": 25, "gender": "F", "subset": "SC", "nights": [1, 2]}
+            ],
+            "summary": {
+                "total_subjects": 10,
+                "age_range": [25, 34],
+                "mean_age": 29.1,
+                "median_age": 29,
+                "min_age": 25,
+                "max_age": 34,
+                "total_nights": 20
+            }
+        },
+        "ISRUC-Sleep": {
+            "description": "ISRUC-Sleep Database Subgroup-I",
+            "total_control_subjects": 7,
+            "control_subjects": [
+                {"subject_id": 25, "age": 29, "gender": "F", "diagnosis": "D. Afectiva", "other_problems": "", "nights": [1, 2]},
+                {"subject_id": 27, "age": 26, "gender": "F", "diagnosis": "RONCOPATIA", "other_problems": "Cardiac artifact", "nights": [1, 2]},
+                {"subject_id": 33, "age": 32, "gender": "F", "diagnosis": "SAOS", "other_problems": "", "nights": [1, 2]},
+                {"subject_id": 36, "age": 36, "gender": "F", "diagnosis": "D. Afectiva", "other_problems": "Rapid activity in EEG", "nights": [1, 2]},
+                {"subject_id": 48, "age": 23, "gender": "F", "diagnosis": "S. PERNAS INQUIETAS", "other_problems": "", "nights": [1, 2]},
+                {"subject_id": 65, "age": 31, "gender": "F", "diagnosis": "RONCOPATIA", "other_problems": "", "nights": [1, 2]},
+                {"subject_id": 67, "age": 33, "gender": "F", "diagnosis": "Parasomnia", "other_problems": "Depression", "nights": [1, 2]}
+            ],
+            "summary": {
+                "total_subjects": 7,
+                "age_range": [23, 36],
+                "mean_age": 30.0,
+                "median_age": 31,
+                "min_age": 23,
+                "max_age": 36,
+                "total_nights": 14
+            }
+        },
+        "DREAMS": {
+            "description": "DREAMS Subjects Database - Healthy Subjects",
+            "total_control_subjects": 9,
+            "control_subjects": [
+                {"subject_id": "subject1", "age": 23, "gender": "F", "recording_duration": "08:00:40", "nights": [1]},
+                {"subject_id": "subject3", "age": 24, "gender": "F", "recording_duration": "08:24:20", "nights": [1]},
+                {"subject_id": "subject8", "age": 22, "gender": "F", "recording_duration": "08:05:00", "nights": [1]},
+                {"subject_id": "subject9", "age": 21, "gender": "F", "recording_duration": "09:18:40", "nights": [1]},
+                {"subject_id": "subject10", "age": 20, "gender": "F", "recording_duration": "08:36:20", "nights": [1]},
+                {"subject_id": "subject11", "age": 30, "gender": "F", "recording_duration": "08:24:10", "nights": [1]},
+                {"subject_id": "subject13", "age": 23, "gender": "F", "recording_duration": "09:15:40", "nights": [1]},
+                {"subject_id": "subject15", "age": 20, "gender": "F", "recording_duration": "07:00:00", "nights": [1]},
+                {"subject_id": "subject16", "age": 27, "gender": "F", "recording_duration": "08:03:50", "nights": [1]}
+            ],
+            "summary": {
+                "total_subjects": 9,
+                "age_range": [20, 30],
+                "mean_age": 23.4,
+                "median_age": 23,
+                "min_age": 20,
+                "max_age": 30,
+                "total_nights": 9
+            }
+        }
+    },
+    "three_group_comparison": {
+        "group_A_menopausal_women": {
+            "description": "更年期女性组",
+            "total_subjects": {
+                "Sleep-EDF": 8,
+                "ISRUC-Sleep": 8,
+                "DREAMS": 6,
+                "combined": 22
+            },
+            "age_range": [45, 59],
+            "gender": "F"
+        },
+        "group_B_young_women": {
+            "description": "年轻女性对照组",
+            "total_subjects": {
+                "Sleep-EDF": 10,
+                "ISRUC-Sleep": 7,
+                "DREAMS": 9,
+                "combined": 26
+            },
+            "age_range": [20, 36],
+            "gender": "F"
+        },
+        "group_C_young_men": {
+            "description": "年轻男性对照组",
+            "total_subjects": {
+                "Sleep-EDF": 10,
+                "ISRUC-Sleep": 8,
+                "DREAMS": 4
+            },
+            "age_range": [20, 38],
+            "gender": "M",
+            "note": "用于排除性别因素干扰"
+        }
+    }
+}
